@@ -1,0 +1,69 @@
+   <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cours de Bureau Commercial, Technique Commerciale et Économie Générale pour les séries G.">
+    <title>Cours | Réussir en Gestion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button type="button" class="menu-toggle" aria-controls="sidebar" aria-expanded="false"><span class="menu-toggle-icon" aria-hidden="true">☰</span><span>Menu</span></button>
+    <div class="sidebar-overlay" aria-hidden="true"></div>
+    <header class="sidebar" id="sidebar">
+        <img src="images/logo.png" alt="Logo du site" class="logo" width="100" height="100">
+        <nav id="navigation" aria-label="Navigation principale">
+            <ul>
+                <li><a href="index.html">Accueil</a></li><li><a href="apropos.html">À propos</a></li><li><a href="cours.html" class="actif" aria-current="page">Cours</a></li>
+                <li><a href="TD.html">TD</a></li><li><a href="Epreuves.htm">Épreuves</a></li><li><a href="corrigés-types.html">Corrigés types</a></li><li><a href="QCM.html">QCM</a></li><li><a href="Repetition.html">Répétitions</a></li><li><a href="Contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="actions-compte"><button type="button" id="btn-inscription">S'inscrire</button><button type="button" id="btn-connexion">Se connecter</button></div>
+    </header>
+    <main>
+        <section id="cours-hero" class="cours-hero">
+            <p class="sur-titre">Espace élève</p><h1>Cours et ressources pédagogiques</h1>
+            <p>Retrouvez les supports de cours classés par classe et par matière pour apprendre efficacement et réviser à votre rythme.</p>
+        </section>
+        <section class="catalogue-section" aria-labelledby="catalogue-title">
+            <div class="section-entete"><div><p class="sur-titre">Bibliothèque</p><h2 id="catalogue-title">Choisissez un cours</h2></div><p id="resultat-compteur" class="resultat-compteur" aria-live="polite"></p></div>
+            <div class="filtres" aria-label="Filtres des cours">
+                <label for="recherche">Rechercher<input type="search" id="recherche" placeholder="Ex. Technique Commerciale" autocomplete="off"></label>
+                <label for="filtre-classe">Classe<select id="filtre-classe"><option value="toutes">Toutes les classes</option><option>2nde G1</option><option>1ère G1</option><option>Terminale G1</option><option>2nde G2</option><option>1ère G2</option><option>Terminale G2</option><option>2nde G3</option><option>1ère G3</option><option>Terminale G3</option></select></label>
+                <label for="filtre-matiere">Matière<select id="filtre-matiere"><option value="toutes">Toutes les matières</option><option>Bureau Commercial</option><option>Technique Commerciale</option><option>Économie Générale</option></select></label>
+            </div>
+            <div id="liste-ressources" class="ressources-grid"></div><p id="aucun-resultat" class="aucun-resultat" hidden>Aucun cours ne correspond à votre recherche.</p>
+        </section>
+        <section class="aide-ajout" aria-labelledby="ajout-title"><div><p class="sur-titre">Mise à jour</p><h2 id="ajout-title">Publication par le professeur</h2><p>Les nouveaux documents sont publiés depuis l'espace professeur et apparaissent automatiquement ici.</p></div><div class="exemple-chemin">Accès administrateur : <code>admin.html</code></div></section>
+    </main>
+    <footer id="footer"><div class="footer-contenu"><div class="footer-bloc"><img src="images/logo.png" alt="Logo du site" width="80" height="80"><p><strong>M. KPOGNON Kokou Claude</strong></p></div><div class="footer-bloc"><h3>Sections</h3><nav aria-label="Liens des sections"><ul><li><a href="index.html#avantages">Avantages</a></li><li><a href="index.html#statistiques">Statistiques</a></li><li><a href="index.html#dernieres-publications">Dernières publications</a></li><li><a href="index.html#temoignages">Témoignages</a></li><li><a href="index.html#appel-action">Nous rejoindre</a></li></ul></nav></div><div class="footer-bloc"><h3>Navigation</h3><nav aria-label="Navigation secondaire"><ul><li><a href="index.html">Accueil</a></li><li><a href="apropos.html">À propos</a></li><li><a href="cours.html">Cours</a></li><li><a href="TD.html">TD</a></li><li><a href="Epreuves.htm">Épreuves</a></li><li><a href="corrigés-types.html">Corrigés types</a></li><li><a href="QCM.html">QCM</a></li><li><a href="Repetition.html">Répétitions</a></li><li><a href="Contact.html">Contact</a></li></ul></nav></div><div class="footer-bloc"><h3>Contact</h3><p>Téléphone : <a href="tel:+22893265325">+228 93 26 53 25</a></p><p>Email : <a href="kpognonkoamiclaude@gmail.com">kpognonkoamiclaude@gmail.com</a></p><p>WhatsApp : <a href="https://wa.me/22893265325" target="_blank" rel="noopener">+228 93 26 53 25</a></p></div><div class="footer-bloc"><h3>Réseaux sociaux</h3><nav aria-label="Réseaux sociaux"><ul class="reseaux"><li><a href="https://www.facebook.com" target="_blank" rel="noopener">Facebook</a></li><li><a href="https://www.twitter.com" target="_blank" rel="noopener">Twitter</a></li><li><a href="https://www.instagram.com" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://www.linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li></ul></nav></div></div><p class="copyright">© 2024 M. KPOGNON Koami Claude. Tous droits réservés.</p></footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="programme.js"></script>
+    <script>
+        const client = supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+        const documentsLocaux = [
+            { type: 'Cours', classe: '1ère G2', matiere: 'Économie Générale', titre: 'Cours de Économie Générale — 1ère G2', fichier: 'documents/cours/economie-generale-1ere-g2.pdf' }
+        ];
+        let documents = documentsLocaux;
+        const liste = document.querySelector('#liste-ressources'), compteur = document.querySelector('#resultat-compteur'), aucunResultat = document.querySelector('#aucun-resultat'), recherche = document.querySelector('#recherche');
+        const filtres = [document.querySelector('#filtre-classe'),document.querySelector('#filtre-matiere')];
+        function afficherDocuments() {
+            const texte = recherche.value.trim().toLowerCase(), [classe,matiere] = filtres.map(filtre => filtre.value);
+            const resultats = documents.filter(document => (!texte || `${document.titre} ${document.matiere} ${document.classe}`.toLowerCase().includes(texte)) && (classe === 'toutes' || document.classe === classe) && (matiere === 'toutes' || document.matiere === matiere));
+            compteur.textContent = `${resultats.length} cours`; aucunResultat.hidden = resultats.length !== 0;
+            liste.innerHTML = resultats.map(document => { const disponible = Boolean(document.fichier); return `<article class="ressource-card ${disponible ? 'disponible' : 'indisponible'}"><div class="ressource-icon" aria-hidden="true">📘</div><div class="ressource-contenu"><span class="badge">Cours</span><h3>${document.titre}</h3><p>${disponible ? 'Document disponible en PDF' : 'Document à venir'}</p></div>${disponible ? `<div class="ressource-actions"><a class="btn btn-secondaire" href="${document.fichier}" target="_blank" rel="noopener">Ouvrir</a><a class="btn" href="${document.fichier}" download>Télécharger</a></div>` : '<span class="statut-indisponible">Bientôt disponible</span>'}</article>`; }).join('');
+        }
+        async function chargerDocuments() {
+            const resultat = await client.from('documents').select('*').eq('type', 'Cours').order('created_at', { ascending: false });
+            if (resultat.error) { afficherDocuments(); return; }
+            documents = [...documentsLocaux, ...(resultat.data || [])].filter(document => PROGRAMME_GESTION.estAssociationValide(document.classe, document.matiere)); afficherDocuments();
+        }
+        recherche.addEventListener('input',afficherDocuments); PROGRAMME_GESTION.synchroniserFiltres(filtres[0],filtres[1],afficherDocuments); chargerDocuments();
+        const menuToggle = document.querySelector('.menu-toggle'), sidebar = document.querySelector('#sidebar'), overlay = document.querySelector('.sidebar-overlay');
+        function fermerMenu(){sidebar.classList.remove('ouvert');overlay.classList.remove('visible');menuToggle.setAttribute('aria-expanded','false');overlay.setAttribute('aria-hidden','true');document.body.classList.remove('menu-ouvert');}
+        menuToggle.addEventListener('click',()=>{const ouvert=!sidebar.classList.contains('ouvert');sidebar.classList.toggle('ouvert',ouvert);overlay.classList.toggle('visible',ouvert);menuToggle.setAttribute('aria-expanded',String(ouvert));overlay.setAttribute('aria-hidden',String(!ouvert));document.body.classList.toggle('menu-ouvert',ouvert);}); overlay.addEventListener('click',fermerMenu); sidebar.querySelectorAll('a').forEach(lien=>lien.addEventListener('click',fermerMenu)); document.addEventListener('keydown',event=>{if(event.key==='Escape')fermerMenu();});
+    </script>
+<script src="auth.js"></script><script src="acces-site.js"></script>
+</body>
+</html>

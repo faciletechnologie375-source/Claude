@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Créer un compte élève sur Réussir en Gestion."><title>Créer un compte | Réussir en Gestion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="compte-page">
+    <main class="compte-shell">
+        <a class="compte-retour" href="index.html">Retour au site</a>
+        <section class="compte-hero"><p class="sur-titre">Espace élève</p><h1>Créer votre compte</h1><p>Enregistrez vos informations pour retrouver les ressources et vous inscrire plus facilement aux séances de TD.</p></section>
+        <section class="compte-panel">
+            <form id="inscription-form" class="compte-form">
+                <label for="nom">Nom et prénom<input id="nom" name="nom" required autocomplete="name"></label>
+                <label for="email">Adresse e-mail<input id="email" name="email" type="email" required autocomplete="email"></label>
+                <label for="classe">Classe<select id="classe" name="classe" required><option value="">Choisir une classe</option><option>2nde G1</option><option>1ère G1</option><option>Terminale G1</option><option>2nde G2</option><option>1ère G2</option><option>Terminale G2</option><option>2nde G3</option><option>1ère G3</option><option>Terminale G3</option></select></label>
+                <label for="telephone">Téléphone<input id="telephone" name="telephone" type="tel" required autocomplete="tel"></label>
+                <label for="mot-de-passe">Mot de passe<input id="mot-de-passe" name="mot-de-passe" type="password" minlength="6" required autocomplete="new-password"></label>
+                <label for="confirmation">Confirmer le mot de passe<input id="confirmation" name="confirmation" type="password" minlength="6" required autocomplete="new-password"></label>
+                <button class="btn full" type="submit">Créer mon compte</button>
+            </form>
+            <p id="inscription-statut" class="compte-statut" hidden role="status"></p>
+            <p class="compte-lien">Vous avez déjà un compte ? <a href="connexion.html">Se connecter</a></p>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script>
+    <script>
+        const client = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+        document.querySelector('#inscription-form').addEventListener('submit', async event => {
+            event.preventDefault();
+            const formulaire = new FormData(event.currentTarget), statut = document.querySelector('#inscription-statut');
+            if (formulaire.get('mot-de-passe') !== formulaire.get('confirmation')) { statut.hidden = false; statut.classList.add('erreur'); statut.textContent = 'Les deux mots de passe sont différents.'; return; }
+            statut.hidden = false; statut.classList.remove('erreur'); statut.textContent = 'Création du compte en cours...';
+            const { data, error } = await client.auth.signUp({ email: formulaire.get('email'), password: formulaire.get('mot-de-passe'), options: { data: { nom: formulaire.get('nom'), classe: formulaire.get('classe'), telephone: formulaire.get('telephone') } } });
+            if (error) { statut.classList.add('erreur'); statut.textContent = error.message; return; }
+            if (data.session) window.location.href = 'index.html';
+            else statut.textContent = 'Compte créé. Consultez votre e-mail pour confirmer votre adresse avant de vous connecter.';
+        });
+    </script>
+</body>
+</html>

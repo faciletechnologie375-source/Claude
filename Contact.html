@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contactez M. KPOGNON Koami Claude pour vos cours, répétitions et questions pédagogiques.">
+    <title>Contact | Réussir en Gestion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button type="button" class="menu-toggle" aria-controls="sidebar" aria-expanded="false"><span class="menu-toggle-icon" aria-hidden="true">☰</span><span>Menu</span></button>
+    <div class="sidebar-overlay" aria-hidden="true"></div>
+    <header class="sidebar" id="sidebar">
+        <img src="images/logo.png" alt="Logo du site" class="logo" width="100" height="100">
+        <nav id="navigation" aria-label="Navigation principale">
+            <ul>
+                <li><a href="index.html">Accueil</a></li><li><a href="apropos.html">À propos</a></li><li><a href="cours.html">Cours</a></li>
+                <li><a href="TD.html">TD</a></li><li><a href="Epreuves.htm">Épreuves</a></li><li><a href="corrigés-types.html">Corrigés types</a></li><li><a href="QCM.html">QCM</a></li><li><a href="Repetition.html">Répétitions</a></li><li><a href="Contact.html" class="actif" aria-current="page">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="actions-compte"><button type="button" id="btn-inscription">S'inscrire</button><button type="button" id="btn-connexion">Se connecter</button></div>
+    </header>
+
+    <main>
+        <section id="contact-hero" class="contact-hero">
+            <div><p class="sur-titre">Une question, un objectif, un projet</p><h1>Parlons de votre réussite.</h1><p>Vous avez besoin d'informations sur les cours ou les répétitions ? Écrivez-nous et recevez une réponse adaptée à votre situation.</p><a class="btn btn-clair" href="#message">Envoyer un message</a></div>
+            <div class="contact-hero-note"><span class="contact-hero-icon" aria-hidden="true">✦</span><strong>Un accompagnement commence par un échange.</strong><span>Clarifions ensemble vos besoins.</span></div>
+        </section>
+
+        <section id="informations" class="contact-section contact-infos">
+            <div class="section-entete"><div><p class="sur-titre">Restons en contact</p><h2>Choisissez votre moyen d'échange</h2></div></div>
+            <div class="contact-cards">
+                <a class="contact-card" href="https://wa.me/22893265325?text=Bonjour%20!%20Je%20voudrais%20avoir%20plus%20d'informations." target="_blank" rel="noopener"><span class="contact-card-icon" aria-hidden="true">↗</span><span><strong>WhatsApp</strong><small>Échange rapide et direct</small></span></a>
+                <a class="contact-card" id="email-contact" href="mailto:kpognonkoamiclaude@gmail.com?subject=Demande%20d'information%20p%C3%A9dagogique&amp;body=Bonjour,%0A%0AJe%20souhaite%20obtenir%20des%20informations%20sur%20vos%20ressources%20p%C3%A9dagogiques.%0A%0ANom%20:%20" data-email="kpognonkoamiclaude@gmail.com"><span class="contact-card-icon" aria-hidden="true">@</span><span><strong>Email</strong><small>kpognonkoamiclaude@gmail.com</small></span></a>
+                <a class="contact-card" href="tel:+22893265325"><span class="contact-card-icon" aria-hidden="true">☎</span><span><strong>Téléphone</strong><small>+228 93 26 53 25</small></span></a>
+            </div>
+            <p id="email-confirmation" class="email-confirmation" role="status" aria-live="polite" hidden></p>
+        </section>
+
+        <section id="message" class="contact-section contact-form-section">
+            <div class="contact-form-intro"><p class="sur-titre">Votre demande</p><h2>Envoyez-nous un message</h2><p>Indiquez votre besoin et vos coordonnées. Les champs marqués d'un astérisque sont obligatoires.</p><div class="contact-prompt"><strong>Besoin d'une répétition ?</strong><span>Précisez votre classe, votre matière et vos disponibilités dans le message.</span></div></div>
+            <form class="contact-form" id="contact-form">
+                <div class="form-ligne"><label for="nom">Nom complet <span>*</span></label><input type="text" id="nom" name="nom" autocomplete="name" required></div>
+                <div class="form-ligne"><label for="email">Adresse email <span>*</span></label><input type="email" id="email" name="email" autocomplete="email" required></div>
+                <div class="form-ligne"><label for="objet">Objet</label><select id="objet" name="objet"><option value="cours">Question sur les cours</option><option value="repetitions">Demande de répétitions</option><option value="ressources">Accès aux ressources</option><option value="autre">Autre demande</option></select></div>
+                <div class="form-ligne"><label for="message-texte">Votre message <span>*</span></label><textarea id="message-texte" name="message" rows="6" required></textarea></div>
+                <button class="btn form-submit" type="submit">Envoyer le message sur WhatsApp</button>
+                <p id="contact-confirmation" class="contact-confirmation" role="status" aria-live="polite" hidden>Votre demande est prête. Vérifiez le message WhatsApp avant de l'envoyer.</p>
+            </form>
+        </section>
+
+        <section id="horaires" class="contact-section horaires-section">
+            <div><p class="sur-titre">Disponibilités</p><h2>Quand nous joindre ?</h2><p>Les demandes envoyées en dehors de ces horaires sont traitées dès que possible.</p></div>
+            <div class="horaires-table"><div><span>Lundi à vendredi</span><strong>09 h 00 — 18 h 00</strong></div><div><span>Samedi</span><strong>Selon disponibilité</strong></div><div><span>Dimanche</span><strong>Fermé</strong></div></div>
+        </section>
+
+        <section id="localisation" class="contact-section localisation-section">
+            <div class="localisation-texte"><p class="sur-titre">Rendez-vous</p><h2>Un accompagnement proche de vos objectifs</h2><p>Pour connaître le lieu exact d'une répétition ou organiser un échange, contactez directement le professeur par téléphone ou WhatsApp.</p><a class="btn" href="https://wa.me/22893265325" target="_blank" rel="noopener">Écrire sur WhatsApp</a></div>
+            <div class="localisation-repere" aria-label="Informations de localisation"><span aria-hidden="true">⌖</span><strong>Lomé, Togo</strong><small>Adresse communiquée lors de la prise de rendez-vous</small></div>
+        </section>
+
+        <section id="question-rapide" class="contact-cta"><p class="sur-titre">Prêt à commencer ?</p><h2>Votre prochaine question peut devenir votre prochain progrès.</h2><a class="btn" href="#message">Commencer l'échange</a></section>
+    </main>
+
+    <footer id="footer">
+        <div class="footer-contenu">
+            <div class="footer-bloc"><img src="images/logo.png" alt="Logo du site" width="80" height="80"><p><strong>M. KPOGNON Koami Claude</strong></p></div>
+            <div class="footer-bloc"><h3>Sections</h3><nav aria-label="Liens des sections"><ul><li><a href="index.html#avantages">Avantages</a></li><li><a href="index.html#statistiques">Statistiques</a></li><li><a href="index.html#dernieres-publications">Dernières publications</a></li><li><a href="index.html#temoignages">Témoignages</a></li><li><a href="index.html#appel-action">Nous rejoindre</a></li></ul></nav></div>
+            <div class="footer-bloc"><h3>Navigation</h3><nav aria-label="Navigation secondaire"><ul><li><a href="index.html">Accueil</a></li><li><a href="apropos.html">À propos</a></li><li><a href="cours.html">Cours</a></li><li><a href="TD.html">TD</a></li><li><a href="Epreuves.htm">Épreuves</a></li><li><a href="corrigés-types.html">Corrigés types</a></li><li><a href="QCM.html">QCM</a></li><li><a href="Repetition.html">Répétitions</a></li><li><a href="Contact.html">Contact</a></li></ul></nav></div>
+            <div class="footer-bloc"><h3>Contact</h3><p>Téléphone : <a href="tel:+22893265325">+228 93 26 53 25</a></p><p>Email : <a href="mailto:kpognonkoamiclaude@gmail.com">kpognonkoamiclaude@gmail.com</a></p><p>WhatsApp : <a href="https://wa.me/22893265325" target="_blank" rel="noopener">+228 93 26 53 25</a></p></div>
+            <div class="footer-bloc"><h3>Réseaux sociaux</h3><nav aria-label="Réseaux sociaux"><ul class="reseaux"><li><a href="https://www.facebook.com" target="_blank" rel="noopener">Facebook</a></li><li><a href="https://www.twitter.com" target="_blank" rel="noopener">Twitter</a></li><li><a href="https://www.instagram.com" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://www.linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li></ul></nav></div>
+        </div>
+        <p class="copyright">© 2024 M. KPOGNON Koami Claude. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        const menuToggle = document.querySelector('.menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        const sidebarOverlay = document.querySelector('.sidebar-overlay');
+        const setSidebarState = (isOpen) => { sidebar.classList.toggle('ouvert', isOpen); sidebarOverlay.classList.toggle('visible', isOpen); menuToggle.setAttribute('aria-expanded', String(isOpen)); sidebarOverlay.setAttribute('aria-hidden', String(!isOpen)); document.body.classList.toggle('menu-ouvert', isOpen); };
+        menuToggle.addEventListener('click', () => setSidebarState(!sidebar.classList.contains('ouvert')));
+        sidebarOverlay.addEventListener('click', () => setSidebarState(false));
+        sidebar.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setSidebarState(false)));
+        document.addEventListener('keydown', (event) => { if (event.key === 'Escape') setSidebarState(false); });
+
+        document.querySelector('#email-contact').addEventListener('click', async (event) => {
+            const lien = event.currentTarget;
+            const confirmation = document.querySelector('#email-confirmation');
+            try {
+                await navigator.clipboard.writeText(lien.dataset.email);
+                confirmation.textContent = `Votre logiciel de messagerie va s'ouvrir. L'adresse ${lien.dataset.email} a aussi été copiée.`;
+            } catch {
+                confirmation.textContent = `Votre logiciel de messagerie va s'ouvrir avec l'adresse ${lien.dataset.email}.`;
+            }
+            confirmation.hidden = false;
+        });
+
+        document.querySelector('#contact-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const donnees = new FormData(event.currentTarget);
+            const message = `Bonjour, je souhaite vous contacter.\n\nNom : ${donnees.get('nom')}\nEmail : ${donnees.get('email')}\nObjet : ${donnees.get('objet')}\nMessage : ${donnees.get('message')}`;
+            document.querySelector('#contact-confirmation').hidden = false;
+            window.open(`https://wa.me/22893265325?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
+        });
+    </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="auth.js"></script><script src="acces-site.js"></script>
+</body>
+</html>

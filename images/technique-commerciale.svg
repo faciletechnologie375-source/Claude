@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" role="img" aria-labelledby="title desc">
+<title id="title">Illustration de technique commerciale</title><desc id="desc">Un présentoir de produits et une flèche de progression commerciale</desc>
+<rect width="800" height="480" rx="28" fill="#102a43"/>
+<circle cx="680" cy="90" r="130" fill="#1d6fa5" opacity=".7"/><path d="M82 370h636" stroke="#f2b84b" stroke-width="10" stroke-linecap="round"/>
+<rect x="115" y="205" width="225" height="165" rx="16" fill="#f4f7fa"/><path d="M145 205v-44h165v44" fill="none" stroke="#f2b84b" stroke-width="12" stroke-linejoin="round"/><rect x="152" y="242" width="55" height="65" rx="8" fill="#1d6fa5"/><rect x="228" y="242" width="55" height="65" rx="8" fill="#f2b84b"/><path d="M150 333h155" stroke="#1d6fa5" stroke-width="12" stroke-linecap="round"/>
+<path d="M405 316l73-80 49 43 100-137" fill="none" stroke="#f2b84b" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/><path d="M576 142h51v51" fill="none" stroke="#f2b84b" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/><circle cx="405" cy="316" r="12" fill="#fff"/><circle cx="478" cy="236" r="12" fill="#fff"/><circle cx="527" cy="279" r="12" fill="#fff"/>
+<text x="82" y="90" fill="#fff" font-family="Arial,sans-serif" font-size="32" font-weight="700">TECHNIQUE COMMERCIALE</text>
+</svg>

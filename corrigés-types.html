@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Corrigés types et méthodes pour les exercices de gestion.">
+    <title>Corrigés types | Réussir en Gestion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button class="menu-toggle" type="button" aria-controls="sidebar" aria-expanded="false">☰ <span>Menu</span></button>
+    <div class="sidebar-overlay"></div>
+    <header class="sidebar" id="sidebar">
+        <img src="images/logo.png" alt="Logo du site" class="logo" width="100" height="100">
+        <nav aria-label="Navigation principale"><ul>
+            <li><a href="index.html">Accueil</a></li><li><a href="apropos.html">À propos</a></li><li><a href="cours.html">Cours</a></li><li><a href="TD.html">TD</a></li><li><a href="Epreuves.htm">Épreuves</a></li><li><a href="corrigés-types.html" class="actif" aria-current="page">Corrigés types</a></li><li><a href="QCM.html">QCM</a></li><li><a href="Repetition.html">Répétitions</a></li><li><a href="Contact.html">Contact</a></li>
+        </ul></nav>
+        <div class="actions-compte"><button type="button">S'inscrire</button><button type="button">Se connecter</button></div>
+    </header>
+    <main class="corriges-page">
+        <section class="page-hero corriges-hero"><div><p class="sur-titre">Méthode et progression</p><h1>Corrigés types</h1><p>Travaillez d'abord seul, puis utilisez une correction claire pour comprendre chaque étape et progresser durablement.</p><div class="corriges-hero-meta"><span>15 parcours pédagogiques</span><span>PDF ajoutables</span><span>Accès par classe et matière</span></div></div><div class="corriges-hero-mark" aria-hidden="true"><span>✓</span><small>Comprendre<br>Corriger<br>Progresser</small></div></section>
+        <section class="section correction-library"><div class="section-head"><div><p class="sur-titre">Bibliothèque de travail</p><h2>Choisissez votre corrigé</h2><p class="section-intro">Filtrez les ressources selon votre classe et votre matière.</p></div><p class="resultat-compteur" id="compteur" aria-live="polite"></p></div>
+            <div class="filtres"><label>Rechercher<input id="recherche" type="search" placeholder="Ex. facture commerciale"></label><label>Classe<select id="classe"><option value="toutes">Toutes les classes</option><option>2nde G1</option><option>1ère G1</option><option>Terminale G1</option><option>2nde G2</option><option>1ère G2</option><option>Terminale G2</option><option>2nde G3</option><option>1ère G3</option><option>Terminale G3</option></select></label><label>Matière<select id="matiere"><option value="toutes">Toutes les matières</option><option>Bureau Commercial</option><option>Technique Commerciale</option><option>Économie Générale</option></select></label></div>
+            <div id="liste" class="corrections-grid"></div><p id="vide" class="empty" hidden>Aucun corrigé ne correspond à votre recherche.</p>
+        </section>
+        <section class="section publication-panel"><div class="aide-ajout"><div><p class="sur-titre">Gestion des ressources</p><h2>Publication par le professeur</h2><p>Le professeur ajoute les corrigés PDF depuis <strong>admin.html</strong>. Après publication, le document apparaît automatiquement ici avec sa classe et sa matière.</p></div><div class="exemple-chemin"><span>Accès professeur</span><code>admin.html → Corrige → classe → matière → PDF</code></div></div></section>
+        <section class="section"><p class="note"><strong>À retenir :</strong> un corrigé sert à comprendre la démarche. Reprenez l'exercice seul avant de consulter chaque étape.</p></section>
+    </main>
+    <footer id="footer"><div class="footer-contenu"><div class="footer-bloc"><img src="images/logo.png" alt="Logo du site" width="80" height="80"><p><strong>M. KPOGNON Kokou Claude</strong></p></div><div class="footer-bloc"><h3>Sections</h3><nav aria-label="Liens des sections"><ul><li><a href="index.html#avantages">Avantages</a></li><li><a href="index.html#statistiques">Statistiques</a></li><li><a href="index.html#dernieres-publications">Dernières publications</a></li><li><a href="index.html#temoignages">Témoignages</a></li><li><a href="index.html#appel-action">Nous rejoindre</a></li></ul></nav></div><div class="footer-bloc"><h3>Navigation</h3><nav aria-label="Navigation secondaire"><ul><li><a href="index.html">Accueil</a></li><li><a href="apropos.html">À propos</a></li><li><a href="cours.html">Cours</a></li><li><a href="TD.html">TD</a></li><li><a href="Epreuves.htm">Épreuves</a></li><li><a href="corrigés-types.html">Corrigés types</a></li><li><a href="QCM.html">QCM</a></li><li><a href="Repetition.html">Répétitions</a></li><li><a href="Contact.html">Contact</a></li></ul></nav></div><div class="footer-bloc"><h3>Contact</h3><p>Téléphone : <a href="tel:+22893265325">+228 93 26 53 25</a></p><p>Email : <a href="mailto:info@ecole.com">info@ecole.com</a></p><p>WhatsApp : <a href="https://wa.me/22893265325" target="_blank" rel="noopener">+228 93 26 53 25</a></p></div><div class="footer-bloc"><h3>Réseaux sociaux</h3><nav aria-label="Réseaux sociaux"><ul class="reseaux"><li><a href="https://www.facebook.com" target="_blank" rel="noopener">Facebook</a></li><li><a href="https://www.twitter.com" target="_blank" rel="noopener">Twitter</a></li><li><a href="https://www.instagram.com" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://www.linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li></ul></nav></div></div><p class="copyright">© 2024 M. KPOGNON Kokou Claude. Tous droits réservés.</p></footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="programme.js"></script><script src="bibliotheque.js"></script><script>
+        const client = supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+        let corriges=[];
+        const recherche=document.querySelector('#recherche'), classe=document.querySelector('#classe'), matiere=document.querySelector('#matiere'), liste=document.querySelector('#liste');
+        function afficher(){const texte=recherche.value.toLowerCase().trim(), resultats=corriges.filter(c=>(!texte||`${c.titre} ${c.matiere} ${c.classe}`.toLowerCase().includes(texte))&&(classe.value==='toutes'||c.classe===classe.value)&&(matiere.value==='toutes'||c.matiere===matiere.value));document.querySelector('#compteur').textContent=`${resultats.length} corrigé${resultats.length>1?'s':''}`;document.querySelector('#vide').hidden=resultats.length>0;liste.innerHTML=resultats.map(c=>`<article class="correction-card"><span class="badge">${c.matiere} · ${c.classe}</span><h3>${c.titre}</h3><p><a class="btn" href="${c.fichier}" target="_blank" rel="noopener">Ouvrir le PDF</a> <a class="btn btn-secondaire" href="${c.fichier}" download>Télécharger</a></p></article>`).join('');}
+        async function charger(){corriges=(await chargerDocumentsSupabase('Corrige')).map(document=>({classe:document.classe,matiere:document.matiere,titre:document.titre,fichier:document.fichier})); afficher();} recherche.addEventListener('input',afficher); PROGRAMME_GESTION.synchroniserFiltres(classe,matiere,afficher); afficher(); charger();
+        const toggle=document.querySelector('.menu-toggle'),sidebar=document.querySelector('#sidebar'),overlay=document.querySelector('.sidebar-overlay');
+        function fermerMenu(){sidebar.classList.remove('ouvert');overlay.classList.remove('visible');toggle.setAttribute('aria-expanded','false');overlay.setAttribute('aria-hidden','true');document.body.classList.remove('menu-ouvert');}
+        toggle.addEventListener('click',()=>{const ouvert=!sidebar.classList.contains('ouvert');sidebar.classList.toggle('ouvert',ouvert);overlay.classList.toggle('visible',ouvert);toggle.setAttribute('aria-expanded',String(ouvert));overlay.setAttribute('aria-hidden',String(!ouvert));document.body.classList.toggle('menu-ouvert',ouvert)});overlay.addEventListener('click',fermerMenu);sidebar.querySelectorAll('a').forEach(lien=>lien.addEventListener('click',fermerMenu));document.addEventListener('keydown',event=>{if(event.key==='Escape')fermerMenu()});
+    </script>
+<script src="auth.js"></script><script src="acces-site.js"></script>
+</body>
+</html>

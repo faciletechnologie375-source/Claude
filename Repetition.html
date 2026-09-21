@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Répétitions personnalisées et supports PDF pour les élèves des séries G.">
+    <title>Répétitions | Réussir en Gestion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button type="button" class="menu-toggle" aria-controls="sidebar" aria-expanded="false"><span class="menu-toggle-icon" aria-hidden="true">☰</span><span>Menu</span></button>
+    <div class="sidebar-overlay" aria-hidden="true"></div>
+    <header class="sidebar" id="sidebar">
+        <img src="images/logo.png" alt="Logo du site" class="logo" width="100" height="100">
+        <nav id="navigation" aria-label="Navigation principale">
+            <ul>
+                <li><a href="index.html">Accueil</a></li><li><a href="apropos.html">À propos</a></li><li><a href="cours.html">Cours</a></li>
+                <li><a href="TD.html">TD</a></li><li><a href="Epreuves.htm">Épreuves</a></li><li><a href="corrigés-types.html">Corrigés types</a></li><li><a href="QCM.html">QCM</a></li><li><a href="Repetition.html" class="actif" aria-current="page">Répétitions</a></li><li><a href="Contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="actions-compte"><button type="button" id="btn-inscription" data-scroll="inscription">S'inscrire</button><button type="button" id="btn-connexion" data-scroll="inscription">Se connecter</button></div>
+    </header>
+    <main>
+        <section class="repetition-hero">
+            <div><p class="sur-titre">Accompagnement scolaire</p><h1>Progressez avec des répétitions adaptées à votre niveau</h1><p>Des séances en petit groupe ou personnalisées pour comprendre les cours, s'entraîner et préparer efficacement les examens.</p><div class="hero-actions"><a class="btn" href="#inscription">S'inscrire maintenant</a><a class="btn btn-clair" href="#ressources">Voir les supports PDF</a></div></div>
+            <img src="images/professeur.jpg" alt="Enseignant accompagnant les élèves" width="420" height="280">
+        </section>
+        <section class="repetition-section" aria-labelledby="fonctionnement-title">
+            <p class="sur-titre">Une méthode claire</p><h2 id="fonctionnement-title">Comment se déroulent les répétitions ?</h2>
+            <div class="etapes-repetition"><article><span>01</span><h3>Inscription</h3><p>Indiquez votre classe, votre matière et vos disponibilités dans le formulaire.</p></article><article><span>02</span><h3>Prise de contact</h3><p>Nous vous contactons pour confirmer vos besoins et la formule choisie.</p></article><article><span>03</span><h3>Planification</h3><p>Un horaire adapté est défini selon vos disponibilités et votre niveau.</p></article><article><span>04</span><h3>Accompagnement</h3><p>Vous progressez grâce aux explications, exercices et corrections guidées.</p></article></div>
+        </section>
+        <section class="repetition-section" aria-labelledby="offres-title">
+            <div class="section-entete"><div><p class="sur-titre">Formules</p><h2 id="offres-title">Choisissez votre accompagnement</h2></div></div>
+            <div class="formules-grid"><article class="formule-card"><span class="formule-label">Sur mesure</span><h3>Suivi personnalisé</h3><p>Un accompagnement centré sur les difficultés et les objectifs de l'élève.</p><ul><li>Explications adaptées</li><li>Exercices ciblés</li><li>Suivi de progression</li></ul><a class="btn" href="#inscription" data-formule="Suivi individuel à domicile">Choisir cette formule</a></article><article class="formule-card formule-principale"><span class="formule-label">En petit groupe</span><h3>Répétition collective</h3><p>Travail en groupe pour apprendre, pratiquer et échanger avec d'autres élèves.</p><ul><li>Travail collaboratif</li><li>TD et QCM</li><li>Préparation aux examens</li></ul><a class="btn" href="#inscription" data-formule="Répétition en petit groupe">Choisir cette formule</a></article></div>
+        </section>
+        <section id="ressources" class="repetition-section" aria-labelledby="ressources-title">
+            <div class="section-entete"><div><p class="sur-titre">Bibliothèque de révision</p><h2 id="ressources-title">Supports des répétitions</h2></div><p id="repetition-compteur" class="resultat-compteur" aria-live="polite"></p></div>
+            <div class="filtres"><label for="repetition-recherche">Rechercher<input type="search" id="repetition-recherche" placeholder="Ex. Économie Générale" autocomplete="off"></label><label for="repetition-classe">Classe<select id="repetition-classe"><option value="toutes">Toutes les classes</option><option>2nde G1</option><option>1ère G1</option><option>Terminale G1</option><option>2nde G2</option><option>1ère G2</option><option>Terminale G2</option><option>2nde G3</option><option>1ère G3</option><option>Terminale G3</option></select></label><label for="repetition-matiere">Matière<select id="repetition-matiere"><option value="toutes">Toutes les matières</option><option>Bureau Commercial</option><option>Technique Commerciale</option><option>Économie Générale</option></select></label></div>
+            <div id="repetition-documents" class="ressources-grid"></div><p id="repetition-vide" class="aucun-resultat" hidden>Aucun support ne correspond à votre recherche.</p>
+            <p class="note-pdf">Pour publier un PDF, ajoutez-le dans <code>documents/repetitions/</code>, puis renseignez la propriété <code>fichier</code> dans le tableau <code>supports</code> du script de cette page.</p>
+        </section>
+        <section id="inscription" class="inscription-section" aria-labelledby="inscription-title">
+            <div><p class="sur-titre">Réserver une place</p><h2 id="inscription-title">Demande d'inscription</h2><p>Remplissez ce formulaire. Après validation, WhatsApp s'ouvrira avec votre demande préremplie afin de faciliter la prise de contact.</p></div>
+            <form id="inscription-form">
+                <h3>Informations de l'élève</h3>
+                <div class="form-grid">
+                    <label for="nom-eleve">Nom<input id="nom-eleve" name="nom-eleve" autocomplete="family-name" required></label>
+                    <label for="prenom-eleve">Prénom<input id="prenom-eleve" name="prenom-eleve" autocomplete="given-name" required></label>
+                    <label for="date-naissance">Date de naissance<input type="date" id="date-naissance" name="date-naissance" required></label>
+                    <label for="genre">Genre<select id="genre" name="genre" required><option value="">Choisir</option><option>Fille</option><option>Garçon</option><option>Autre</option><option>Je préfère ne pas préciser</option></select></label>
+                    <label for="classe">Classe<select id="classe" name="classe" required><option value="">Choisir une classe</option><option>2nde G1</option><option>1ère G1</option><option>Terminale G1</option><option>2nde G2</option><option>1ère G2</option><option>Terminale G2</option><option>2nde G3</option><option>1ère G3</option><option>Terminale G3</option></select></label>
+                    <label for="ecole">Établissement scolaire<input id="ecole" name="ecole" required placeholder="Nom de l'établissement"></label>
+                    <label for="adresse-eleve">Adresse de résidence<input id="adresse-eleve" name="adresse-eleve" autocomplete="street-address" required></label>
+                    <label for="telephone-eleve">Téléphone de l'élève<input type="tel" id="telephone-eleve" name="telephone-eleve" autocomplete="tel"></label>
+                </div>
+                <h3>Informations du parent ou tuteur</h3>
+                <div class="form-grid">
+                    <label for="nom-tuteur">Nom et prénom<input id="nom-tuteur" name="nom-tuteur" required></label>
+                    <label for="lien-tuteur">Lien avec l'élève<select id="lien-tuteur" name="lien-tuteur" required><option value="">Choisir</option><option>Père</option><option>Mère</option><option>Tuteur légal</option><option>Autre responsable</option></select></label>
+                    <label for="telephone-tuteur">Téléphone principal<input type="tel" id="telephone-tuteur" name="telephone-tuteur" autocomplete="tel" required placeholder="Ex. 90 00 00 00"></label>
+                    <label for="telephone-secondaire">Téléphone secondaire<input type="tel" id="telephone-secondaire" name="telephone-secondaire" placeholder="Facultatif"></label>
+                    <label for="email-tuteur">Adresse e-mail<input type="email" id="email-tuteur" name="email-tuteur" autocomplete="email" placeholder="parent@exemple.com"></label>
+                    <label for="adresse-tuteur">Adresse du parent ou tuteur<input id="adresse-tuteur" name="adresse-tuteur" required></label>
+                </div>
+                <h3>Choix de la répétition</h3>
+                <div class="form-grid">
+                    <label for="matiere">Matière<select id="matiere" name="matiere" required><option value="">Choisir une matière</option></select></label>
+                    <label for="type-repetition">Type de répétition<select id="type-repetition" name="type-repetition" required><option value="">Choisir un type</option><option>Suivi individuel à domicile</option><option>Suivi individuel en ligne</option><option>Répétition en petit groupe</option><option>Stage intensif avant examen</option></select></label>
+                    <label for="frequence">Fréquence souhaitée<select id="frequence" name="frequence" required><option value="">Choisir une fréquence</option><option>Une séance par semaine</option><option>Deux séances par semaine</option><option>Plus de deux séances par semaine</option><option>À définir avec l'enseignant</option></select></label>
+                    <label for="disponibilite">Disponibilités<input id="disponibilite" name="disponibilite" required placeholder="Ex. mercredi après-midi et samedi matin"></label>
+                    <label for="message">Objectif ou besoin particulier<textarea id="message" name="message" rows="3" placeholder="Notions à revoir, préparation d'une épreuve..."></textarea></label>
+                </div>
+                <label class="consentement" for="autorisation"><input type="checkbox" id="autorisation" name="autorisation" required> Le parent ou tuteur autorise la prise de contact pour organiser les répétitions.</label>
+                <button type="submit" class="btn">Envoyer la demande sur WhatsApp</button><p id="confirmation-inscription" class="confirmation-inscription" role="status" hidden>Votre demande est prête. Vérifiez le message WhatsApp avant de l'envoyer.</p>
+            </form>
+        </section>
+        <section class="faq-section" aria-labelledby="faq-title"><p class="sur-titre">Questions fréquentes</p><h2 id="faq-title">À savoir avant de s'inscrire</h2><details><summary>À quelles classes s'adressent les répétitions ?</summary><p>Elles sont proposées aux élèves des séries G : 2nde, 1ère et Terminale G1, G2 et G3.</p></details><details><summary>Les horaires sont-ils flexibles ?</summary><p>Oui. Les horaires sont définis après la demande d'inscription selon les disponibilités de l'élève et de l'enseignant.</p></details><details><summary>Les séances sont-elles individuelles ?</summary><p>Deux formules sont proposées : un suivi personnalisé ou une répétition en petit groupe.</p></details></section>
+    </main>
+    <footer id="footer"><div class="footer-contenu"><div class="footer-bloc"><img src="images/logo.png" alt="Logo du site" width="80" height="80"><p><strong>M. KPOGNON Kokou Claude</strong></p></div><div class="footer-bloc"><h3>Sections</h3><nav aria-label="Liens des sections"><ul><li><a href="index.html#avantages">Avantages</a></li><li><a href="index.html#statistiques">Statistiques</a></li><li><a href="index.html#dernieres-publications">Dernières publications</a></li><li><a href="index.html#temoignages">Témoignages</a></li><li><a href="index.html#appel-action">Nous rejoindre</a></li></ul></nav></div><div class="footer-bloc"><h3>Navigation</h3><nav aria-label="Navigation secondaire"><ul><li><a href="index.html">Accueil</a></li><li><a href="apropos.html">À propos</a></li><li><a href="cours.html">Cours</a></li><li><a href="TD.html">TD</a></li><li><a href="Epreuves.htm">Épreuves</a></li><li><a href="corrigés-types.html">Corrigés types</a></li><li><a href="QCM.html">QCM</a></li><li><a href="Repetition.html">Répétitions</a></li><li><a href="Contact.html">Contact</a></li></ul></nav></div><div class="footer-bloc"><h3>Contact</h3><p>Téléphone : <a href="tel:+22893265325">+228 93 26 53 25</a></p><p>Email : <a href="kpognonkoamiclaude@gmail.com">kpognonkoamiclaude@gmail.com</a></p><p>WhatsApp : <a href="https://wa.me/22893265325" target="_blank" rel="noopener">+228 93 26 53 25</a></p></div><div class="footer-bloc"><h3>Réseaux sociaux</h3><nav aria-label="Réseaux sociaux"><ul class="reseaux"><li><a href="https://www.facebook.com" target="_blank" rel="noopener">Facebook</a></li><li><a href="https://www.twitter.com" target="_blank" rel="noopener">Twitter</a></li><li><a href="https://www.instagram.com" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://www.linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li></ul></nav></div></div><p class="copyright">© 2024 M. KPOGNON Koami Claude. Tous droits réservés.</p></footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="programme.js"></script><script src="bibliotheque.js"></script><script>
+        const client = supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+        const classes = PROGRAMME_GESTION.classes;
+        const matieres = PROGRAMME_GESTION.matieres;
+        // Ajoutez le chemin du PDF dans « fichier » pour rendre le support accessible.
+        let supports = [];
+        const documents = document.querySelector('#repetition-documents'), compteur = document.querySelector('#repetition-compteur'), recherche = document.querySelector('#repetition-recherche'), filtreClasse = document.querySelector('#repetition-classe'), filtreMatiere = document.querySelector('#repetition-matiere'), classeInscription = document.querySelector('#classe'), matiereInscription = document.querySelector('#matiere');
+        function actualiserMatieres(selecteurClasse, selecteurMatiere, valeurPrecedente = '') { const disponibles = selecteurClasse.value ? PROGRAMME_GESTION.matieresParClasse[selecteurClasse.value] : matieres; selecteurMatiere.innerHTML = `<option value="">Choisir une matière</option>${disponibles.map(matiere => `<option>${matiere}</option>`).join('')}`; if (disponibles.includes(valeurPrecedente)) selecteurMatiere.value = valeurPrecedente; }
+        actualiserMatieres(classeInscription, matiereInscription); classeInscription.addEventListener('change', () => actualiserMatieres(classeInscription, matiereInscription, matiereInscription.value));
+        function afficherSupports(){
+            const texte = recherche.value.trim().toLowerCase(), resultats = supports.filter(support => (!texte || support.titre.toLowerCase().includes(texte)) && (filtreClasse.value === 'toutes' || support.classe === filtreClasse.value) && (filtreMatiere.value === 'toutes' || support.matiere === filtreMatiere.value));
+            compteur.textContent = `${resultats.length} support${resultats.length > 1 ? 's' : ''}`; document.querySelector('#repetition-vide').hidden = resultats.length !== 0;
+            documents.innerHTML = resultats.map(support => { const disponible = Boolean(support.fichier); return `<article class="ressource-card ${disponible ? 'disponible' : 'indisponible'}"><div class="ressource-icon" aria-hidden="true">📄</div><div class="ressource-contenu"><span class="badge">Support de répétition</span><h3>${support.titre}</h3><p>${disponible ? 'Document disponible en PDF' : 'Document à venir'}</p></div>${disponible ? `<div class="ressource-actions"><a class="btn btn-secondaire" href="${support.fichier}" target="_blank" rel="noopener">Ouvrir</a><a class="btn" href="${support.fichier}" download>Télécharger</a></div>` : '<span class="statut-indisponible">Bientôt disponible</span>'}</article>`; }).join('');
+        }
+        async function charger(){supports=(await chargerDocumentsSupabase('Repetition')).map(document=>({classe:document.classe,matiere:document.matiere,titre:document.titre,fichier:document.fichier})); afficherSupports();} recherche.addEventListener('input', afficherSupports); PROGRAMME_GESTION.synchroniserFiltres(filtreClasse, filtreMatiere, afficherSupports); afficherSupports(); charger();
+        document.querySelectorAll('[data-formule]').forEach(lien => lien.addEventListener('click', () => { document.querySelector('#type-repetition').value = lien.dataset.formule; }));
+        document.querySelectorAll('[data-scroll]').forEach(bouton => bouton.addEventListener('click', () => document.querySelector('#inscription').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'})));
+        document.querySelector('#inscription-form').addEventListener('submit', event => { event.preventDefault(); const donnees = new FormData(event.currentTarget), message = `Bonjour, je souhaite inscrire un élève aux répétitions.\n\nÉLÈVE\nNom et prénom : ${donnees.get('nom-eleve')} ${donnees.get('prenom-eleve')}\nDate de naissance : ${donnees.get('date-naissance')}\nGenre : ${donnees.get('genre')}\nClasse : ${donnees.get('classe')}\nÉtablissement : ${donnees.get('ecole')}\nAdresse : ${donnees.get('adresse-eleve')}\nTéléphone : ${donnees.get('telephone-eleve') || 'Non renseigné'}\n\nPARENT OU TUTEUR\nNom et prénom : ${donnees.get('nom-tuteur')}\nLien : ${donnees.get('lien-tuteur')}\nTéléphone principal : ${donnees.get('telephone-tuteur')}\nTéléphone secondaire : ${donnees.get('telephone-secondaire') || 'Non renseigné'}\nE-mail : ${donnees.get('email-tuteur') || 'Non renseigné'}\nAdresse : ${donnees.get('adresse-tuteur')}\n\nRÉPÉTITION\nMatière : ${donnees.get('matiere')}\nType : ${donnees.get('type-repetition')}\nFréquence : ${donnees.get('frequence')}\nDisponibilités : ${donnees.get('disponibilite')}\nObjectif ou besoin : ${donnees.get('message') || 'Aucun'}`; document.querySelector('#confirmation-inscription').hidden = false; window.open(`https://wa.me/+22893265325?text=${encodeURIComponent(message)}`, '_blank', 'noopener'); });
+        const menuToggle = document.querySelector('.menu-toggle'), sidebar = document.querySelector('#sidebar'), overlay = document.querySelector('.sidebar-overlay'); function fermerMenu(){sidebar.classList.remove('ouvert');overlay.classList.remove('visible');menuToggle.setAttribute('aria-expanded','false');overlay.setAttribute('aria-hidden','true');document.body.classList.remove('menu-ouvert');} menuToggle.addEventListener('click',()=>{const ouvert=!sidebar.classList.contains('ouvert');sidebar.classList.toggle('ouvert',ouvert);overlay.classList.toggle('visible',ouvert);menuToggle.setAttribute('aria-expanded',String(ouvert));overlay.setAttribute('aria-hidden',String(!ouvert));document.body.classList.toggle('menu-ouvert',ouvert);}); overlay.addEventListener('click',fermerMenu); sidebar.querySelectorAll('a').forEach(lien=>lien.addEventListener('click',fermerMenu)); document.addEventListener('keydown',event=>{if(event.key==='Escape')fermerMenu();});
+    </script>
+<script src="auth.js"></script><script src="acces-site.js"></script>
+</body>
+</html>

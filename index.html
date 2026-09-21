@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Site de cours, travaux dirigés, épreuves corrigées et répétitions pour les élèves des séries G.">
+    <title>Réussir en Gestion | Cours, TD et Répétitions</title>
+    <link rel="stylesheet" href="style.css">
+        <!-- DEBUT ONESIGNAL - NE PAS DEPLACER -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "30c41a06-ddbb-4b89-9821-88b2c1d01824",
+          notifyButton: {
+            enable: true,
+          },
+        });
+      });
+    </script>
+    <!-- FIN ONESIGNAL -->
+</head>
+<body>
+
+    <button type="button" class="menu-toggle" aria-controls="sidebar" aria-expanded="false">
+        <span class="menu-toggle-icon" aria-hidden="true">☰</span>
+        <span>Menu</span>
+    </button>
+    <div class="sidebar-overlay" aria-hidden="true"></div>
+
+    <!-- ============ SIDEBAR / NAVIGATION ============ -->
+    <header class="sidebar" id="sidebar">
+        <img src="images/logo.png" alt="Logo du site" class="logo" width="100" height="100">
+
+        <nav id="navigation" aria-label="Navigation principale">
+            <ul>
+                <li><a href="index.html" class="actif">Accueil</a></li>
+                <li><a href="apropos.html">À propos</a></li>
+                <li><a href="cours.html">Cours</a></li>
+                <li><a href="TD.html">TD</a></li>
+                <li><a href="Epreuves.htm">Épreuves</a></li>
+                <li><a href="corrigés-types.html">Corrigés types</a></li>
+                <li><a href="QCM.html">QCM</a></li>
+                <li><a href="Repetition.html">Répétitions</a></li>
+                <li><a href="Contact.html">Contact</a></li>
+            </ul>
+        </nav>
+
+        <div class="actions-compte">
+            <button type="button" id="btn-inscription">S'inscrire</button>
+            <button type="button" id="btn-connexion">Se connecter</button>
+        </div>
+    </header>
+
+    <!-- ============ CONTENU PRINCIPAL ============ -->
+    <main>
+
+        <!-- HERO -->
+        <section id="hero">
+            <h1>Réussissez vos études en Gestion grâce à un accompagnement de qualité</h1>
+            <p>Accédez à des cours, des travaux dirigés, des épreuves corrigées et des QCM pour mieux préparer vos évaluations et examens.</p>
+            <div class="hero-boutons">
+                <a class="btn btn-or" href="cours.html">Découvrir les cours</a>
+                <a class="btn btn-clair" href="Repetition.html#inscription">S'inscrire aux répétitions</a>
+            </div>
+        </section>
+
+        <!-- PRÉSENTATION DU PROFESSEUR -->
+        <section id="presentation-prof">
+            <img src="images/professeur.jpg" alt="Portrait du professeur" width="150" height="150">
+            <h2>Qui suis-je ?</h2>
+            <p>Professeur de Technique Commerciale, d'Économie Générale et de Bureau Commercial, j'accompagne les élèves des séries G vers la réussite grâce à des cours clairs, des exercices pratiques et un suivi personnalisé.</p>
+            <p>Diplômé de l'École Nationale d'Administration, avec plus de 10 ans d'expérience dans l'enseignement à l'école « Le Révélateur de Talents ».</p>
+        </section>
+
+        <!-- NOS COURS -->
+        <section id="cours-card">
+            <h2>Nos cours</h2>
+
+            <div class="cartes-cours">
+
+                <article class="card">
+                    <img src="images/technique-commerciale.svg" alt="Illustration du cours de Technique Commerciale" width="200" height="150">
+                    <h3>Cours de Technique Commerciale</h3>
+                    <p>Apprenez les bases de la technique commerciale avec des cours interactifs et des exercices pratiques.</p>
+                    <ul class="ressources">
+                        <li>TD</li>
+                        <li>Exercices</li>
+                        <li>Épreuves</li>
+                    </ul>
+                    <a class="btn" href="cours.html">Accéder au cours</a>
+                </article>
+
+                <article class="card">
+                    <img src="images/economie-generale.svg" alt="Illustration du cours d'Économie Générale" width="200" height="150">
+                    <h3>Cours d'Économie Générale</h3>
+                    <p>Comprenez les concepts économiques fondamentaux et leur application dans le monde réel.</p>
+                    <ul class="ressources">
+                        <li>TD</li>
+                        <li>Exercices</li>
+                        <li>Épreuves</li>
+                    </ul>
+                    <a class="btn" href="cours.html">Accéder au cours</a>
+                </article>
+
+                <article class="card">
+                    <img src="images/bureau-commercial.svg" alt="Illustration du cours de Bureau Commercial" width="200" height="150">
+                    <h3>Cours de Bureau Commercial</h3>
+                    <p>Maîtrisez les compétences nécessaires pour gérer efficacement un bureau commercial.</p>
+                    <ul class="ressources">
+                        <li>TD</li>
+                        <li>Exercices</li>
+                        <li>Épreuves</li>
+                    </ul>
+                    <a class="btn" href="cours.html">Accéder au cours</a>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- CLASSES D'ENSEIGNEMENT -->
+        <section id="classes">
+            <h2>Nos classes d'enseignement</h2>
+
+            <div class="grid">
+
+                <article class="carte-class">
+                    <div class="numero">1</div>
+                    <h3 class="titre-class">2nde G1</h3>
+                    <p class="matiere">Bureau Commercial</p><p class="matiere">Économie Générale</p>
+                    <a class="btn" href="TD.html">Voir les TD</a>
+                </article>
+
+                <article class="carte-class">
+                    <div class="numero">2</div>
+                    <h3 class="titre-class">1ère G1</h3>
+                    <p class="matiere">Économie Générale</p>
+                    <a class="btn" href="TD.html">Voir les TD</a>
+                </article>
+
+                <article class="carte-class">
+                    <div class="numero">3</div>
+                    <h3 class="titre-class">Tle G1</h3>
+                    <p class="matiere">Économie Générale</p>
+                    <a class="btn" href="TD.html">Voir les TD</a>
+                </article>
+
+                <article class="carte-class">
+                    <div class="numero">4</div>
+                    <h3 class="titre-class">2nde G2</h3>
+                    <p class="matiere">Bureau Commercial</p>
+                    <p class="matiere">Économie Générale</p>
+                    <a class="btn" href="TD.html">Voir les TD</a>
+                </article>
+
+                <article class="carte-class">
+                    <div class="numero">5</div>
+                    <h3 class="titre-class">1ère G2</h3>
+                    <p class="matiere">Économie Générale</p>
+                    <a class="btn" href="TD.html">Voir les TD</a>
+                </article>
+
+                <article class="carte-class">
+                    <div class="numero">6</div>
+                    <h3 class="titre-class">Tle G2</h3>
+                    <p class="matiere">Économie Générale</p>
+                    <a class="btn" href="TD.html">Voir les TD</a>
+                </article>
+
+                <article class="carte-class">
+                    <div class="numero">7</div>
+                    <h3 class="titre-class">2nde G3</h3>
+                    <p class="matiere">Bureau Commercial</p>
+                    <p class="matiere">Technique Commerciale</p>
+                    <p class="matiere">Économie Générale</p>
+                    <a class="btn" href="TD.html">Voir les TD</a>
+                </article>
+
+                <article class="carte-class">
+                    <div class="numero">8</div>
+                    <h3 class="titre-class">1ère G3</h3>
+                    <p class="matiere">Technique Commerciale</p>
+                    <p class="matiere">Économie Générale</p>
+                    <a class="btn" href="TD.html">Voir les TD</a>
+                </article>
+
+                <article class="carte-class">
+                    <div class="numero">9</div>
+                    <h3 class="titre-class">Tle G3</h3>
+                    <p class="matiere">Technique Commerciale</p>
+                    <p class="matiere">Économie Générale</p>
+                    <a class="btn" href="TD.html">Voir les TD</a>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- CONTENU DU SITE -->
+        <section id="contenu-site">
+            <h2>Ce site présente les ressources suivantes</h2>
+            <ul class="liste-simple">
+                <li>Des cours complets et détaillés pour chaque matière enseignée.</li>
+                <li>Des travaux dirigés (TD) pour mettre en pratique les connaissances acquises.</li>
+                <li>Des épreuves corrigées pour s'entraîner et évaluer ses compétences.</li>
+                <li>Des QCM pour tester ses connaissances de manière interactive.</li>
+                <li>Des répétitions pour renforcer la compréhension des concepts clés.</li>
+            </ul>
+        </section>
+
+        <!-- AVANTAGES -->
+        <section id="avantages">
+            <h2>Avantages de notre site</h2>
+            <ul class="liste-simple">
+                <li>Cours organisés par classe.</li>
+                <li>Documents de cours téléchargeables.</li>
+                <li>Exercices régulièrement mis à jour.</li>
+                <li>Préparation efficace aux examens grâce aux épreuves corrigées et aux QCM.</li>
+                <li>Renforcement des connaissances grâce aux répétitions et aux exercices pratiques.</li>
+                <li>Suivi pédagogique et conseils pour améliorer les performances académiques.</li>
+            </ul>
+        </section>
+
+        <!-- STATISTIQUES -->
+        <section id="statistiques">
+            <h2>Statistiques du site</h2>
+            <div class="stats">
+                <div class="stat">
+                    <span class="chiffre">3</span>
+                    <span class="libelle">Matières</span>
+                </div>
+                <div class="stat">
+                    <span class="chiffre">9</span>
+                    <span class="libelle">Classes</span>
+                </div>
+                <div class="stat">
+                    <span class="chiffre">100+</span>
+                    <span class="libelle">Documents</span>
+                </div>
+                <div class="stat">
+                    <span class="chiffre">500+</span>
+                    <span class="libelle">Élèves accompagnés</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- DERNIÈRES PUBLICATIONS -->
+        <section id="dernieres-publications">
+            <h2>Dernières publications</h2>
+            <ul class="liste-simple">
+                <li>Cours d'Économie Générale — 1ère G2</li>
+                <li>TD d'Économie Générale — 1ère G2</li>
+                <li>Épreuve corrigée de Technique Commerciale — Tle G3</li>
+                <li>QCM sur les concepts économiques — 2nde G2</li>
+                <li>Répétition sur la gestion commerciale — 1ère G3</li>
+            </ul>
+        </section>
+
+        <!-- TÉMOIGNAGES -->
+        <section id="temoignages">
+            <h2>Témoignages d'élèves</h2>
+            <div class="liste-temoignages">
+
+                <blockquote>
+                    <p>« Grâce à ce site, j'ai pu mieux comprendre les concepts de la technique commerciale et réussir mes examens. »</p>
+                    <footer>— Élève A</footer>
+                </blockquote>
+
+                <blockquote>
+                    <p>« Les travaux dirigés m'ont permis de mettre en pratique mes connaissances et d'améliorer mes compétences. »</p>
+                    <footer>— Élève B</footer>
+                </blockquote>
+
+                <blockquote>
+                    <p>« Les épreuves corrigées m'ont aidé à identifier mes points faibles et à progresser rapidement. »</p>
+                    <footer>— Élève C</footer>
+                </blockquote>
+
+                <blockquote>
+                    <p>« Les QCM interactifs sont un excellent moyen de tester mes connaissances de manière ludique. »</p>
+                    <footer>— Élève D</footer>
+                </blockquote>
+
+                <blockquote>
+                    <p>« Les répétitions m'ont permis de renforcer ma compréhension des concepts clés et d'être mieux préparé. »</p>
+                    <footer>— Élève E</footer>
+                </blockquote>
+
+            </div>
+        </section>
+
+        <!-- APPEL À L'ACTION -->
+        <section id="appel-action">
+            <h2>Rejoignez-nous dès aujourd'hui</h2>
+            <p>Rejoignez notre communauté d'élèves et bénéficiez de ressources pédagogiques gratuites !</p>
+            <div class="cta-boutons">
+                <a class="btn btn-or" href="cours.html">Consulter les cours</a>
+                <a class="btn" href="Repetition.html#inscription">S'inscrire aux répétitions</a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ============ PIED DE PAGE ============ -->
+    <footer id="footer">
+        <div class="footer-contenu">
+
+            <div class="footer-bloc">
+                <img src="images/logo.png" alt="Logo du site" width="80" height="80">
+                <p><strong>M. KPOGNON Koami Claude</strong></p>
+            </div>
+
+            <div class="footer-bloc">
+                <h3>Sections</h3>
+                <nav aria-label="Liens des sections">
+                    <ul>
+                        <li><a href="#avantages">Avantages</a></li>
+                        <li><a href="#statistiques">Statistiques</a></li>
+                        <li><a href="#dernieres-publications">Dernières publications</a></li>
+                        <li><a href="#temoignages">Témoignages</a></li>
+                        <li><a href="#appel-action">Nous rejoindre</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="footer-bloc">
+                <h3>Navigation</h3>
+                <nav aria-label="Navigation secondaire">
+                    <ul>
+                        <li><a href="index.html">Accueil</a></li>
+                        <li><a href="apropos.html">À propos</a></li>
+                        <li><a href="cours.html">Cours</a></li>
+                        <li><a href="TD.html">TD</a></li>
+                        <li><a href="Epreuves.htm">Épreuves</a></li>
+                        <li><a href="corrigés-types.html">Corrigés types</a></li>
+                        <li><a href="QCM.html">QCM</a></li>
+                        <li><a href="Repetition.html">Répétitions</a></li>
+                        <li><a href="Contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="footer-bloc">
+                <h3>Contact</h3>
+                <p>Téléphone : <a href="tel:+22893265325">+228 93 26 53 25</a></p>
+                <p>Email : <a href="mailto:kpognonkoamiclaude@gmail.com">kpognonkoamiclaude@gmail.com</a></p>
+                <p>WhatsApp : <a href="https://wa.me/22893265325" target="_blank" rel="noopener">+228 93 26 53 25</a></p>
+            </div>
+
+            <div class="footer-bloc">
+                <h3>Réseaux sociaux</h3>
+                <nav aria-label="Réseaux sociaux">
+                    <ul class="reseaux">
+                        <li><a href="https://www.facebook.com" target="_blank" rel="noopener">Facebook</a></li>
+                        <li><a href="https://www.twitter.com" target="_blank" rel="noopener">Twitter</a></li>
+                        <li><a href="https://www.instagram.com" target="_blank" rel="noopener">Instagram</a></li>
+                        <li><a href="https://www.linkedin.com" target="_blank" rel="noopener">LinkedIn</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+
+        <p class="copyright">© 2024 M. KPOGNON Koami Claude. Tous droits réservés.</p>
+    </footer>
+
+        <script>
+            const menuToggle = document.querySelector('.menu-toggle');
+            const sidebar = document.querySelector('.sidebar');
+            const sidebarOverlay = document.querySelector('.sidebar-overlay');
+            const sidebarLinks = sidebar.querySelectorAll('a');
+
+            function setSidebarState(isOpen) {
+                sidebar.classList.toggle('ouvert', isOpen);
+                sidebarOverlay.classList.toggle('visible', isOpen);
+                menuToggle.setAttribute('aria-expanded', String(isOpen));
+                sidebarOverlay.setAttribute('aria-hidden', String(!isOpen));
+                document.body.classList.toggle('menu-ouvert', isOpen);
+            }
+
+            menuToggle.addEventListener('click', () => {
+                setSidebarState(!sidebar.classList.contains('ouvert'));
+            });
+            sidebarOverlay.addEventListener('click', () => setSidebarState(false));
+            sidebarLinks.forEach((link) => link.addEventListener('click', () => setSidebarState(false)));
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') setSidebarState(false);
+            });
+        </script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="auth.js"></script><script src="acces-site.js"></script>
+</body>
+</html>

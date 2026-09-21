@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Se connecter à son compte Réussir en Gestion."><title>Connexion | Réussir en Gestion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="compte-page">
+    <main class="compte-shell">
+        <a class="compte-retour" href="index.html">Retour au site</a>
+        <section class="compte-hero"><p class="sur-titre">Espace personnel</p><h1>Se connecter</h1><p>Accédez à votre espace pour suivre vos inscriptions et retrouver les ressources du site.</p></section>
+        <section class="compte-panel">
+            <form id="connexion-form" class="compte-form">
+                <label for="email">Adresse e-mail<input id="email" name="email" type="email" required autocomplete="username"></label>
+                <label for="mot-de-passe">Mot de passe<input id="mot-de-passe" name="mot-de-passe" type="password" required autocomplete="current-password"></label>
+                <button class="btn full" type="submit">Se connecter</button>
+            </form>
+            <p id="connexion-statut" class="compte-statut" hidden role="status"></p>
+            <p class="compte-lien">Pas encore de compte ? <a href="inscription.html">Créer un compte</a></p>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script>
+    <script>
+        const client = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+        document.querySelector('#connexion-form').addEventListener('submit', async event => {
+            event.preventDefault(); const formulaire = new FormData(event.currentTarget), statut = document.querySelector('#connexion-statut');
+            statut.hidden = false; statut.classList.remove('erreur'); statut.textContent = 'Connexion en cours...';
+            const { error } = await client.auth.signInWithPassword({ email: formulaire.get('email'), password: formulaire.get('mot-de-passe') });
+            if (error) { statut.classList.add('erreur'); statut.textContent = 'E-mail ou mot de passe incorrect.'; return; }
+            const retour = new URLSearchParams(window.location.search).get('retour');
+            window.location.href = retour && /^[a-zA-Z0-9_-]+\.(html|htm)$/.test(retour) ? retour : 'index.html';
+        });
+    </script>
+</body>
+</html>

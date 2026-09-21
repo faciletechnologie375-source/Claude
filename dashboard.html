@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tableau de bord Réussir en Gestion."><title>Tableau de bord | Réussir en Gestion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-page">
+    <main class="dashboard-shell">
+        <header class="dashboard-header"><div><a class="compte-retour" href="index.html">Retour au site</a><p class="sur-titre">Espace personnel</p><h1 id="dashboard-title">Tableau de bord</h1></div><button class="btn btn-secondaire" id="deconnexion" type="button">Se déconnecter</button></header>
+        <p id="dashboard-statut" class="compte-statut" hidden role="status"></p>
+        <section id="professeur-dashboard" hidden>
+            <div class="dashboard-grid dashboard-stats"><article class="dashboard-card"><span class="dashboard-chiffre" id="stat-utilisateurs">0</span><span>Utilisateurs inscrits</span></article><article class="dashboard-card"><span class="dashboard-chiffre" id="stat-documents">0</span><span>Documents publiés</span></article><article class="dashboard-card"><span class="dashboard-chiffre" id="stat-seances">0</span><span>Séances annoncées</span></article><article class="dashboard-card"><span class="dashboard-chiffre" id="stat-inscriptions">0</span><span>Inscriptions aux TD</span></article></div>
+            <article class="dashboard-card dashboard-table"><div class="section-head"><div><p class="sur-titre">Pilotage</p><h2>Séances et participants</h2></div><a class="btn" href="admin.html">Gérer les publications</a></div><div class="table-scroll"><table class="admin-table"><thead><tr><th>Séance</th><th>Date</th><th>Classe</th><th>Inscrits</th><th>Participants</th></tr></thead><tbody id="dashboard-seances"></tbody></table></div></article>
+            <article class="dashboard-card dashboard-table"><div class="section-head"><div><p class="sur-titre">Bibliothèque</p><h2>Documents récents</h2></div></div><div class="table-scroll"><table class="admin-table"><thead><tr><th>Titre</th><th>Type</th><th>Classe</th><th>Matière</th></tr></thead><tbody id="dashboard-documents"></tbody></table></div></article>
+        </section>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script>
+    <script>
+        const client = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey), statut = document.querySelector('#dashboard-statut');
+        const echapper = valeur => String(valeur ?? '').replace(/[&<>'"]/g, caractere => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[caractere]));
+        const afficherErreur = texte => { statut.hidden = false; statut.classList.add('erreur'); statut.textContent = texte; };
+        async function chargerProfesseur() {
+            document.querySelector('#professeur-dashboard').hidden = false; document.querySelector('#dashboard-title').textContent = 'Dashboard professeur';
+            const [documents, seances, utilisateurs] = await Promise.all([client.from('documents').select('*').order('created_at', { ascending: false }), client.from('td_sessions').select('*, td_inscriptions(*)').order('date_seance', { ascending: true }).order('heure', { ascending: true }), client.from('profiles').select('id', { count: 'exact', head: true })]);
+            if (documents.error || seances.error || utilisateurs.error) return afficherErreur('Impossible de charger les données du dashboard.');
+            document.querySelector('#stat-utilisateurs').textContent = utilisateurs.count || 0; document.querySelector('#stat-documents').textContent = documents.data.length; document.querySelector('#stat-seances').textContent = seances.data.length; document.querySelector('#stat-inscriptions').textContent = seances.data.reduce((total, seance) => total + (seance.td_inscriptions?.length || 0), 0);
+            document.querySelector('#dashboard-seances').innerHTML = seances.data.map(seance => { const participants = seance.td_inscriptions || []; return `<tr><td>${echapper(seance.titre)}<br><small>${echapper(seance.matiere)}</small></td><td>${echapper(seance.date_seance)}<br>${echapper(seance.heure.slice(0,5))}</td><td>${echapper(seance.classe)}</td><td>${participants.length}${seance.places ? ` / ${seance.places}` : ''}</td><td>${participants.length ? `<details><summary>Voir les participants</summary><div class="participants-list">${participants.map(participant => `<article class="participant"><strong>${echapper(participant.nom)}</strong><span>${echapper(participant.telephone)} · ${echapper(participant.email || 'E-mail non renseigné')}</span><span>${echapper(participant.message || '')}</span></article>`).join('')}</div></details>` : 'Aucun'}</td></tr>`; }).join('');
+            document.querySelector('#dashboard-documents').innerHTML = documents.data.map(document => `<tr><td>${echapper(document.titre)}</td><td>${echapper(document.type)}</td><td>${echapper(document.classe)}</td><td>${echapper(document.matiere)}</td></tr>`).join('');
+        }
+        async function initialiser() {
+            const { data: sessionData } = await client.auth.getSession(); if (!sessionData.session) { window.location.href = 'connexion.html'; return; }
+            const { data: profil, error } = await client.from('profiles').select('*').eq('id', sessionData.session.user.id).single(); if (error || !profil) return afficherErreur('Profil introuvable. Exécutez le script Supabase puis reconnectez-vous.');
+              if (profil.role !== 'professeur') { await client.auth.signOut(); window.location.href = 'index.html'; return; }
+              await chargerProfesseur();
+        }
+        document.querySelector('#deconnexion').addEventListener('click', async () => { await client.auth.signOut(); window.location.href = 'connexion.html'; }); initialiser();
+    </script>
+</body>
+</html>
