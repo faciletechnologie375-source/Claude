@@ -2,39 +2,291 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Tableau de bord Réussir en Gestion."><title>Tableau de bord | Réussir en Gestion</title>
+    <title>Tableau de bord | Réussir en Gestion</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+.dashboard-charts{grid-template-columns:2fr 1fr; gap:16px; margin-bottom:18px}
+.chart-card{padding:18px}
+.chart-card h3{font-size:.95rem; margin-bottom:12px}
+.chart-wrap{position:relative; width:100%; height:280px}
+.chart-wrap.small{height:260px}
+.dashboard-filters{display:flex; flex-wrap:wrap; gap:10px; margin:14px 0 18px}
+.dashboard-filters select{padding:9px 12px; border-radius:10px; border:1px solid #e5e7eb; flex:1; min-width:130px}
+.kpi-evol{display:block; font-size:.78rem; margin-top:4px; font-weight:600}
+.kpi-evol.up{color:#16a34a}.kpi-evol.down{color:#dc2626}
+.table-tools{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px}
+.table-tools input{padding:8px 11px; border-radius:9px; border:1px solid #e5e7eb; flex:1; min-width:180px}
+.btn-mini{padding:7px 12px; border-radius:8px; border:none; background:#004a99; color:#fff; cursor:pointer}
+.btn-danger{padding:7px 12px; border-radius:8px; border:none; background:#dc2626; color:#fff; cursor:pointer}
+.btn-secondaire{padding:7px 12px; border-radius:8px; border:1px solid #ddd; background:#f3f4f6; cursor:pointer}
+    @media(max-width:900px){.dashboard-charts{grid-template-columns:1fr}.chart-wrap{height:240px}}
+    </style>
 </head>
 <body class="dashboard-page">
-    <main class="dashboard-shell">
-        <header class="dashboard-header"><div><a class="compte-retour" href="index.html">Retour au site</a><p class="sur-titre">Espace personnel</p><h1 id="dashboard-title">Tableau de bord</h1></div><button class="btn btn-secondaire" id="deconnexion" type="button">Se déconnecter</button></header>
-        <p id="dashboard-statut" class="compte-statut" hidden role="status"></p>
-        <section id="professeur-dashboard" hidden>
-            <div class="dashboard-grid dashboard-stats"><article class="dashboard-card"><span class="dashboard-chiffre" id="stat-utilisateurs">0</span><span>Utilisateurs inscrits</span></article><article class="dashboard-card"><span class="dashboard-chiffre" id="stat-documents">0</span><span>Documents publiés</span></article><article class="dashboard-card"><span class="dashboard-chiffre" id="stat-seances">0</span><span>Séances annoncées</span></article><article class="dashboard-card"><span class="dashboard-chiffre" id="stat-inscriptions">0</span><span>Inscriptions aux TD</span></article></div>
-            <article class="dashboard-card dashboard-table"><div class="section-head"><div><p class="sur-titre">Pilotage</p><h2>Séances et participants</h2></div><a class="btn" href="admin.html">Gérer les publications</a></div><div class="table-scroll"><table class="admin-table"><thead><tr><th>Séance</th><th>Date</th><th>Classe</th><th>Inscrits</th><th>Participants</th></tr></thead><tbody id="dashboard-seances"></tbody></table></div></article>
-            <article class="dashboard-card dashboard-table"><div class="section-head"><div><p class="sur-titre">Bibliothèque</p><h2>Documents récents</h2></div></div><div class="table-scroll"><table class="admin-table"><thead><tr><th>Titre</th><th>Type</th><th>Classe</th><th>Matière</th></tr></thead><tbody id="dashboard-documents"></tbody></table></div></article>
-        </section>
-    </main>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script>
-    <script>
-        const client = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey), statut = document.querySelector('#dashboard-statut');
-        const echapper = valeur => String(valeur ?? '').replace(/[&<>'"]/g, caractere => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[caractere]));
-        const afficherErreur = texte => { statut.hidden = false; statut.classList.add('erreur'); statut.textContent = texte; };
-        async function chargerProfesseur() {
-            document.querySelector('#professeur-dashboard').hidden = false; document.querySelector('#dashboard-title').textContent = 'Dashboard professeur';
-            const [documents, seances, utilisateurs] = await Promise.all([client.from('documents').select('*').order('created_at', { ascending: false }), client.from('td_sessions').select('*, td_inscriptions(*)').order('date_seance', { ascending: true }).order('heure', { ascending: true }), client.from('profiles').select('id', { count: 'exact', head: true })]);
-            if (documents.error || seances.error || utilisateurs.error) return afficherErreur('Impossible de charger les données du dashboard.');
-            document.querySelector('#stat-utilisateurs').textContent = utilisateurs.count || 0; document.querySelector('#stat-documents').textContent = documents.data.length; document.querySelector('#stat-seances').textContent = seances.data.length; document.querySelector('#stat-inscriptions').textContent = seances.data.reduce((total, seance) => total + (seance.td_inscriptions?.length || 0), 0);
-            document.querySelector('#dashboard-seances').innerHTML = seances.data.map(seance => { const participants = seance.td_inscriptions || []; return `<tr><td>${echapper(seance.titre)}<br><small>${echapper(seance.matiere)}</small></td><td>${echapper(seance.date_seance)}<br>${echapper(seance.heure.slice(0,5))}</td><td>${echapper(seance.classe)}</td><td>${participants.length}${seance.places ? ` / ${seance.places}` : ''}</td><td>${participants.length ? `<details><summary>Voir les participants</summary><div class="participants-list">${participants.map(participant => `<article class="participant"><strong>${echapper(participant.nom)}</strong><span>${echapper(participant.telephone)} · ${echapper(participant.email || 'E-mail non renseigné')}</span><span>${echapper(participant.message || '')}</span></article>`).join('')}</div></details>` : 'Aucun'}</td></tr>`; }).join('');
-            document.querySelector('#dashboard-documents').innerHTML = documents.data.map(document => `<tr><td>${echapper(document.titre)}</td><td>${echapper(document.type)}</td><td>${echapper(document.classe)}</td><td>${echapper(document.matiere)}</td></tr>`).join('');
-        }
-        async function initialiser() {
-            const { data: sessionData } = await client.auth.getSession(); if (!sessionData.session) { window.location.href = 'connexion.html'; return; }
-            const { data: profil, error } = await client.from('profiles').select('*').eq('id', sessionData.session.user.id).single(); if (error || !profil) return afficherErreur('Profil introuvable. Exécutez le script Supabase puis reconnectez-vous.');
-              if (profil.role !== 'professeur') { await client.auth.signOut(); window.location.href = 'index.html'; return; }
-              await chargerProfesseur();
-        }
-        document.querySelector('#deconnexion').addEventListener('click', async () => { await client.auth.signOut(); window.location.href = 'connexion.html'; }); initialiser();
-    </script>
+<main class="dashboard-shell">
+<header class="dashboard-header"><div><a class="compte-retour" href="index.html">Retour au site</a><p class="sur-titre">Espace personnel</p><h1 id="dashboard-title">Tableau de bord</h1></div><button class="btn btn-secondaire" id="deconnexion" type="button">Se déconnecter</button></header>
+<p id="dashboard-statut" class="compte-statut" hidden></p>
+<section id="professeur-dashboard" hidden>
+<div class="dashboard-card" style="padding:14px"><div class="dashboard-filters"><select id="filtre-periode"><option value="7">7 derniers jours</option><option value="30" selected>30 derniers jours</option><option value="all">Tout</option></select><select id="filtre-classe"><option value="all">Toutes classes</option><option value="G1">G1</option><option value="G2">G2</option><option value="G3">G3</option></select><select id="filtre-matiere"><option value="all">Toutes matières</option></select></div></div>
+<div class="dashboard-grid dashboard-stats"><article class="dashboard-card"><span class="dashboard-chiffre" id="stat-utilisateurs">0</span><span>Utilisateurs</span><span class="kpi-evol" id="evol-utilisateurs"></span></article><article class="dashboard-card"><span class="dashboard-chiffre" id="stat-documents">0</span><span>Documents</span><span class="kpi-evol" id="evol-documents"></span></article><article class="dashboard-card"><span class="dashboard-chiffre" id="stat-seances">0</span><span>Séances</span><span class="kpi-evol" id="evol-seances"></span></article><article class="dashboard-card"><span class="dashboard-chiffre" id="stat-inscriptions">0</span><span>Inscriptions</span><span class="kpi-evol" id="evol-inscriptions"></span></article></div>
+<div class="dashboard-grid dashboard-charts"><article class="dashboard-card chart-card"><h3>Inscriptions / jour</h3><div class="chart-wrap"><canvas id="chart-inscriptions"></canvas></div></article><article class="dashboard-card chart-card"><h3>Par classe</h3><div class="chart-wrap small"><canvas id="chart-classes"></canvas></div></article><article class="dashboard-card chart-card"><h3>Docs par matière</h3><div class="chart-wrap small"><canvas id="chart-matieres"></canvas></div></article><article class="dashboard-card chart-card"><h3>Revenus</h3><div class="chart-wrap small"><canvas id="chart-revenus"></canvas></div></article></div>
+
+<article class="dashboard-card dashboard-table">
+  <div class="section-head"><h2>Mes élèves inscrits</h2><span id="total-eleves" style="font-size:.85rem;color:#666"></span></div>
+  <div class="table-tools"><input id="search-eleves" placeholder="Rechercher un élève par nom, classe, téléphone..."></div>
+  <div class="table-scroll"><table class="admin-table"><thead><tr><th>Nom</th><th>Classe</th><th>Téléphone</th><th>Inscrit le</th><th>Actions</th></tr></thead><tbody id="dashboard-eleves"><tr><td colspan="5">Chargement...</td></tr></tbody></table></div>
+</article>
+
+<article class="dashboard-card dashboard-table" style="border-left:4px solid #ffb400;">
+  <div class="section-head"><h2>📩 Fichiers privés envoyés</h2><button class="btn-secondaire" onclick="chargerFichiersEnvoyes()">Actualiser</button></div>
+  <div id="liste-fichiers-envoyes" style="padding:10px;"><p style="color:#888">Chargement...</p></div>
+</article>
+
+<article class="dashboard-card dashboard-table" style="border-left:4px solid #ef4444;">
+  <div class="section-head"><h2>💬 Réponses des élèves <span id="badge-reponses-dash" style="background:#ef4444;color:white;padding:2px 8px;border-radius:99px;font-size:.8rem;display:none;"></span></h2><button class="btn-secondaire" onclick="chargerReponsesEleves()">Actualiser</button></div>
+  <div id="liste-reponses-eleves" style="padding:10px;"><p style="color:#888">Chargement...</p></div>
+</article>
+
+<article class="dashboard-card dashboard-table"><div class="section-head"><div><h2>Séances</h2></div><a class="btn" href="admin.html">Gérer</a></div><div class="table-tools"><input id="search-seances" placeholder="Rechercher..."><button class="btn-mini" id="export-seances" type="button">CSV</button></div><div class="table-scroll"><table class="admin-table"><thead><tr><th>Séance</th><th>Date</th><th>Classe</th><th>Inscrits</th><th>Participants</th></tr></thead><tbody id="dashboard-seances"></tbody></table></div></article>
+<article class="dashboard-card dashboard-table"><div class="section-head"><h2>Documents</h2></div><div class="table-tools"><input id="search-docs" placeholder="Rechercher..."><button class="btn-mini" id="export-docs" type="button">CSV</button></div><div class="table-scroll"><table class="admin-table"><thead><tr><th>Titre</th><th>Type</th><th>Classe</th><th>Matière</th></tr></thead><tbody id="dashboard-documents"></tbody></table></div></article>
+</section>
+
+<div id="modal-prive" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+  <div style="background:white; padding:22px; border-radius:14px; width:95%; max-width:420px;">
+    <h3 style="margin-top:0;">Envoyer un fichier privé</h3>
+    <p id="modal-prive-eleve" style="color:#666; font-size:.9rem;"></p>
+    <input id="prive-titre" placeholder="Titre ex: Corrigé TD 3" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd; margin:10px 0;">
+    <textarea id="prive-message" placeholder="Message pour l'élève... (optionnel si PDF)" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd; min-height:70px;"></textarea>
+    <input type="file" id="prive-file" accept=".pdf,.doc,.docx,.jpg,.png" style="margin:12px 0; width:100%;">
+    <p style="font-size:.75rem; color:#888;">Tu peux envoyer seulement un message sans PDF si tu veux.</p>
+    <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:10px;">
+      <button class="btn-secondaire" onclick="fermerModalPrive()" type="button">Annuler</button>
+      <button class="btn-mini" id="btn-envoyer-prive" type="button">Envoyer</button>
+    </div>
+    <p id="prive-statut" style="font-size:.85rem; margin-top:10px;"></p>
+  </div>
+</div>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script>
+<script>
+var client = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+var statut = document.getElementById('dashboard-statut');
+function echapper(v){ var s=String(v==null?'':v); return s.replace(/[&<>'"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]}); }
+function afficherErreur(t){ statut.hidden=false; statut.textContent=t; }
+var allDocs=[], allSeances=[], allEleves=[], charts=[];
+function getFiltres(){ return {p:document.getElementById('filtre-periode').value, c:document.getElementById('filtre-classe').value, m:document.getElementById('filtre-matiere').value}; }
+function filtrer(){
+  var f=getFiltres(); var docs=allDocs.slice(); var seas=allSeances.slice();
+  if(f.c!=='all'){ docs=docs.filter(function(d){return d.classe===f.c}); seas=seas.filter(function(s){return s.classe===f.c}); }
+  if(f.m!=='all'){ docs=docs.filter(function(d){return d.matiere===f.m}); seas=seas.filter(function(s){return s.matiere===f.m}); }
+  if(f.p!=='all'){ var lim=new Date(); lim.setDate(lim.getDate()-parseInt(f.p,10)); docs=docs.filter(function(d){return new Date(d.created_at)>=lim}); seas=seas.filter(function(s){return new Date(s.created_at||s.date_seance)>=lim}); }
+  return {docs:docs, seas:seas};
+}
+function renderKPI(docs, seas){
+  document.getElementById('stat-documents').textContent=docs.length;
+  document.getElementById('stat-seances').textContent=seas.length;
+  var total=0; for(var i=0;i<seas.length;i++){ total+= seas[i].td_inscriptions? seas[i].td_inscriptions.length : 0; }
+  document.getElementById('stat-inscriptions').textContent=total;
+}
+function renderCharts(docs, seas){
+  for(var i=0;i<charts.length;i++){ charts[i].destroy(); } charts=[];
+  var f=getFiltres(); var nb=f.p==='all'?7:parseInt(f.p,10); if(nb>14){nb=14}
+  var jours=[]; for(var k=0;k<nb;k++){ var d=new Date(); d.setDate(d.getDate()-(nb-1-k)); jours.push(d.toISOString().slice(0,10)); }
+  var counts=[]; for(var j=0;j<jours.length;j++){ var c=0; for(var s=0;s<seas.length;s++){ var ins=seas[s].td_inscriptions||[]; for(var t=0;t<ins.length;t++){ if((ins[t].created_at||'').slice(0,10)===jours[j]){c++;} } } counts.push(c); }
+  charts.push(new Chart(document.getElementById('chart-inscriptions'),{type:'line', data:{labels:jours, datasets:[{data:counts, borderColor:'#004a99', backgroundColor:'rgba(0,74,153,0.1)', fill:true, tension:0.4}]}, options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}}}));
+  var parClasse={}; for(var a=0;a<seas.length;a++){ var cl=seas[a].classe||'Autre'; parClasse[cl]=(parClasse[cl]||0)+(seas[a].td_inscriptions?seas[a].td_inscriptions.length:0); }
+  charts.push(new Chart(document.getElementById('chart-classes'),{type:'doughnut', data:{labels:Object.keys(parClasse), datasets:[{data:Object.values(parClasse), backgroundColor:['#004a99','#ffb400','#1cc56a','#ff6b6b']}]}, options:{responsive:true, maintainAspectRatio:false}}));
+  var parMat={}; for(var b=0;b<docs.length;b++){ var mat=docs[b].matiere||'Autre'; parMat[mat]=(parMat[mat]||0)+1; }
+  charts.push(new Chart(document.getElementById('chart-matieres'),{type:'bar', data:{labels:Object.keys(parMat), datasets:[{data:Object.values(parMat), backgroundColor:'#ffb400'}]}, options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}}}));
+  var rev=Object.values(parClasse).map(function(v){return v*2000});
+  charts.push(new Chart(document.getElementById('chart-revenus'),{type:'bar', data:{labels:Object.keys(parClasse), datasets:[{data:rev, backgroundColor:'#1cc56a'}]}, options:{responsive:true, maintainAspectRatio:false, indexAxis:'y', plugins:{legend:{display:false}}}}));
+}
+function renderTables(docs, seas){
+  var q1=document.getElementById('search-seances').value.toLowerCase();
+  var q2=document.getElementById('search-docs').value.toLowerCase();
+  var html1=''; for(var i=0;i<seas.length;i++){ var s=seas[i]; if((s.titre+' '+s.classe).toLowerCase().indexOf(q1)===-1){continue;} var parts=s.td_inscriptions||[]; html1+='<tr><td>'+echapper(s.titre)+'</td><td>'+echapper(s.date_seance)+'</td><td>'+echapper(s.classe)+'</td><td>'+parts.length+'</td><td>'+(parts.length?parts.length+' inscrits':'Aucun')+'</td></tr>'; }
+  document.getElementById('dashboard-seances').innerHTML=html1;
+  var html2=''; for(var j=0;j<docs.length;j++){ var d=docs[j]; if((d.titre+' '+d.matiere).toLowerCase().indexOf(q2)===-1){continue;} html2+='<tr><td>'+echapper(d.titre)+'</td><td>'+echapper(d.type)+'</td><td>'+echapper(d.classe)+'</td><td>'+echapper(d.matiere)+'</td></tr>'; }
+  document.getElementById('dashboard-documents').innerHTML=html2;
+}
+function renderEleves(){
+  var q=document.getElementById('search-eleves').value.toLowerCase();
+  var tbody=document.getElementById('dashboard-eleves');
+  var html=''; var count=0;
+  for(var i=0;i<allEleves.length;i++){
+    var e=allEleves[i];
+    var hay=(e.nom+' '+e.classe+' '+e.telephone).toLowerCase();
+    if(hay.indexOf(q)===-1){continue;}
+    count++;
+    var date=new Date(e.created_at).toLocaleDateString('fr-FR');
+    html+='<tr><td>'+echapper(e.nom||'—')+'</td><td>'+echapper(e.classe||'—')+'</td><td>'+echapper(e.telephone||'—')+'</td><td>'+echapper(date)+'</td><td style="display:flex; gap:6px; flex-wrap:wrap;"><button class="btn-mini" onclick="ouvrirModalPrive(\''+e.id+'\',\''+echapper(e.nom).replace(/'/g,"\\'")+'\')">Envoyer PDF</button><button class="btn-danger" onclick="supprimerEleve(\''+e.id+'\',\''+echapper(e.nom).replace(/'/g,"\\'")+'\')">Supprimer</button></td></tr>';
+  }
+  tbody.innerHTML = html || '<tr><td colspan="5">Aucun élève trouvé</td></tr>';
+  document.getElementById('total-eleves').textContent = count+' / '+allEleves.length+' élèves';
+}
+async function chargerEleves(){
+  var r=await client.from('profiles').select('id, nom, classe, telephone, created_at').eq('role','eleve').order('created_at',{ascending:false});
+  if(r.error){ document.getElementById('dashboard-eleves').innerHTML='<tr><td colspan="5">Erreur: '+echapper(r.error.message)+'</td></tr>'; return; }
+  allEleves=r.data||[];
+  renderEleves();
+}
+async function supprimerEleve(id, nom){
+  if(!confirm('Supprimer définitivement le compte de '+nom+'?')){return;}
+  var res=await client.from('profiles').delete().eq('id', id);
+  if(res.error){ alert('Erreur: '+res.error.message); return; }
+  allEleves=allEleves.filter(function(e){return e.id!==id;});
+  renderEleves();
+  document.getElementById('stat-utilisateurs').textContent = (parseInt(document.getElementById('stat-utilisateurs').textContent||'0')-1);
+}
+var eleveCibleId=null;
+function ouvrirModalPrive(id, nom){
+  eleveCibleId=id;
+  document.getElementById('modal-prive-eleve').textContent = "À : " + nom;
+  document.getElementById('modal-prive').style.display='flex';
+  document.getElementById('prive-statut').textContent='';
+}
+function fermerModalPrive(){
+  document.getElementById('modal-prive').style.display='none';
+  eleveCibleId=null;
+  document.getElementById('prive-titre').value='';
+  document.getElementById('prive-message').value='';
+  document.getElementById('prive-file').value='';
+}
+document.getElementById('btn-envoyer-prive').addEventListener('click', async function(){
+  var titre=document.getElementById('prive-titre').value.trim();
+  var message=document.getElementById('prive-message').value.trim();
+  var fileInput=document.getElementById('prive-file');
+  var statut=document.getElementById('prive-statut');
+  if(!titre){ statut.textContent="Mets un titre obligatoire"; return; }
+  if(!eleveCibleId){ return; }
+  statut.textContent="Envoi en cours...";
+  var fileUrl=null;
+  if(fileInput.files.length>0){
+    var file=fileInput.files[0];
+    var fileName=Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+    var up=await client.storage.from('prives').upload(eleveCibleId+'/'+fileName, file);
+    if(up.error){ statut.textContent="Erreur upload: "+up.error.message; return; }
+    var pub=client.storage.from('prives').getPublicUrl(eleveCibleId+'/'+fileName);
+    fileUrl=pub.data.publicUrl;
+  }
+  var sess=await client.auth.getSession();
+  var ins=await client.from('fichiers_prives').insert({ prof_id: sess.data.session.user.id, eleve_id: eleveCibleId, titre: titre, message: message, file_url: fileUrl });
+  if(ins.error){ statut.textContent="Erreur: "+ins.error.message; }
+  else{ statut.textContent="✅ Envoyé!"; chargerFichiersEnvoyes(); setTimeout(fermerModalPrive, 800); }
+});
+async function chargerFichiersEnvoyes(){
+  var box=document.getElementById('liste-fichiers-envoyes');
+  if(!box) return;
+  var r=await client.from('fichiers_prives').select('*').order('created_at',{ascending:false}).limit(30);
+  if(r.error){ box.innerHTML="Erreur: "+echapper(r.error.message); return; }
+  if(!r.data || r.data.length==0){ box.innerHTML="<span style='color:#888'>Aucun envoi privé.</span>"; return; }
+  var html="";
+  for(var i=0;i<r.data.length;i++){
+    var f=r.data[i];
+    var nomE="..."; var elev=allEleves.find(function(e){return e.id===f.eleve_id;}); if(elev){ nomE=elev.nom||elev.telephone; }
+    html+='<div style="display:flex; justify-content:space-between; gap:10px; padding:10px; border:1px solid #eee; border-radius:10px; margin-bottom:8px; background:#fff; flex-wrap:wrap;"><div><b>'+echapper(f.titre)+'</b> → <span style="color:#004a99">'+echapper(nomE)+'</span><br><small style="color:#666">'+echapper(f.message||'')+' - '+new Date(f.created_at).toLocaleString('fr-FR')+'</small><br>'+(f.file_url?'<a href="'+f.file_url+'" target="_blank" style="font-size:.8rem;">📄 Voir fichier</a>':'<span style="font-size:.8rem;color:#888;">Message seul</span>')+'</div><div style="display:flex; gap:6px; align-items:center;"><button class="btn-mini" style="background:#ffb400; color:#000;" onclick="modifierPrive(\''+f.id+'\',\''+echapper(f.titre).replace(/'/g,"\\'")+'\',\''+echapper(f.message||'').replace(/'/g,"\\'")+'\')">✏️ Modifier</button><button class="btn-danger" onclick="supprimerPrive(\''+f.id+'\',\''+ (f.file_url||'').replace(/'/g,"") +'\')">🗑️</button></div></div>';
+  }
+  box.innerHTML=html;
+}
+async function supprimerPrive(id, fileUrl){
+  if(!confirm("Supprimer définitivement? L'élève ne le verra plus.")) return;
+  try{
+    if(fileUrl && fileUrl.includes('/prives/')){
+      var path=fileUrl.split('/prives/')[1].split('?')[0];
+      path=decodeURIComponent(path);
+      await client.storage.from('prives').remove([path]);
+    }
+  }catch(e){}
+  var del=await client.from('fichiers_prives').delete().eq('id', id);
+  if(del.error) alert("Erreur: "+del.error.message);
+  else { alert("Supprimé!"); chargerFichiersEnvoyes(); }
+}
+async function modifierPrive(id, ancienTitre, ancienMsg){
+  var nouveauTitre=prompt("Nouveau titre:", ancienTitre);
+  if(nouveauTitre===null) return;
+  var nouveauMsg=prompt("Nouveau message:", ancienMsg);
+  if(nouveauMsg===null) return;
+  var up=await client.from('fichiers_prives').update({titre:nouveauTitre, message:nouveauMsg}).eq('id', id);
+  if(up.error) alert("Erreur: "+up.error.message);
+  else { alert("Modifié!"); chargerFichiersEnvoyes(); }
+}
+
+// === HISTORIQUE COMPLET + VIDER + VICE VERSA ===
+async function chargerReponsesEleves(){
+  var box=document.getElementById('liste-reponses-eleves');
+  var badge=document.getElementById('badge-reponses-dash');
+  var r=await client.from('reponses_eleves').select('*').order('created_at',{ascending:false}).limit(100);
+  if(r.error){ box.innerHTML="Erreur: "+echapper(r.error.message); return; }
+  var nonLus=r.data.filter(function(x){return!x.lu;}).length;
+  if(badge){ if(nonLus>0){ badge.textContent=nonLus; badge.style.display='inline-block'; } else { badge.style.display='none'; } }
+  if(!r.data || r.data.length==0){ box.innerHTML="<span style='color:#888'>Aucune réponse d'élève.</span>"; return; }
+  var html='<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;"><span style="font-size:.85rem; color:#666;">'+r.data.length+' messages - '+nonLus+' non lus</span><button class="btn-danger" onclick="viderHistoriqueReponses()">🗑️ Vider tout l\'historique</button></div>';
+  for(var i=0;i<r.data.length;i++){
+    var rep=r.data[i];
+    var elev=allEleves.find(function(e){return e.id===rep.eleve_id;});
+    var nomE= elev? (elev.nom+' - '+(elev.classe||'')) : rep.eleve_id.slice(0,8);
+    html+='<div style="display:flex; justify-content:space-between; gap:10px; padding:12px; border:1px solid '+(rep.lu?'#e5e7eb':'#fecaca')+'; border-radius:10px; margin-bottom:8px; background:'+(rep.lu?'#fff':'#fff5f5')+'; flex-wrap:wrap;"><div style="flex:1;"><b>'+echapper(nomE)+'</b> <small style="color:#666">'+new Date(rep.created_at).toLocaleString('fr-FR')+' '+(rep.lu?'✅ Lu':'🔴 Nouveau')+'</small><br><p style="margin:6px 0; white-space:pre-wrap;">'+echapper(rep.message)+'</p></div><div style="display:flex; gap:6px; align-items:center; flex-direction:column;">'+(rep.lu?'':'<button class="btn-mini" style="background:#16a34a;" onclick="marquerReponseLue(\''+rep.id+'\')">✅ Lu</button>')+'<button class="btn-danger" onclick="supprimerUneReponse(\''+rep.id+'\')">🗑️</button></div></div>';
+  }
+  box.innerHTML=html;
+}
+async function marquerReponseLue(id){
+  var up=await client.from('reponses_eleves').update({lu:true}).eq('id', id);
+  if(up.error) alert(up.error.message); else chargerReponsesEleves();
+}
+async function supprimerUneReponse(id){
+  if(!confirm("Supprimer ce message?")) return;
+  var del=await client.from('reponses_eleves').delete().eq('id', id);
+  if(del.error){ alert("Erreur: "+del.error.message); console.log(del.error); } else chargerReponsesEleves();
+}
+async function viderHistoriqueReponses(){
+  if(!confirm("Vider DÉFINITIVEMENT tout l'historique?")) return;
+  var del=await client.from('reponses_eleves').delete().gte('created_at','2000-01-01');
+  if(del.error){ alert("Erreur: "+del.error.message); console.log(del.error); }
+  else { alert("Historique vidé!"); chargerReponsesEleves(); }
+}
+
+function refresh(){ var data=filtrer(); renderKPI(data.docs, data.seas); renderCharts(data.docs, data.seas); renderTables(data.docs, data.seas); }
+function exportCSV(id, name){ var rows=document.querySelectorAll('#'+id+' tr'); var csv=''; rows.forEach(function(tr){ var cols=[]; var tds=tr.children; for(var i=0;i<tds.length;i++){ cols.push('"' + tds[i].innerText.replace(/"/g,'""') + '"'); } csv+=cols.join(',')+'\n'; }); var blob=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; a.click(); }
+async function charger(){
+  document.getElementById('professeur-dashboard').hidden=false;
+  var r1=await client.from('documents').select('*').order('created_at',{ascending:false});
+  var r2=await client.from('td_sessions').select('*, td_inscriptions(*)').order('date_seance',{ascending:true});
+  var r3=await client.from('profiles').select('id',{count:'exact', head:true});
+  if(r1.error||r2.error||r3.error){ return afficherErreur('Erreur chargement'); }
+  allDocs=r1.data; allSeances=r2.data;
+  document.getElementById('stat-utilisateurs').textContent=r3.count||0;
+  var mats={}; for(var i=0;i<allDocs.length;i++){mats[allDocs[i].matiere]=1} for(var j=0;j<allSeances.length;j++){mats[allSeances[j].matiere]=1}
+  var opts='<option value="all">Toutes matières</option>'; for(var k in mats){ if(k && k!=='undefined'){ opts+='<option value="'+echapper(k)+'">'+echapper(k)+'</option>'; } }
+  document.getElementById('filtre-matiere').innerHTML=opts;
+  await chargerEleves();
+  await chargerFichiersEnvoyes();
+  await chargerReponsesEleves();
+  // VICE-VERSA : écoute INSERT + UPDATE + DELETE
+  client.channel('reponses-eleves-live')
+   .on('postgres_changes',{event:'INSERT', schema:'public', table:'reponses_eleves'}, chargerReponsesEleves)
+   .on('postgres_changes',{event:'UPDATE', schema:'public', table:'reponses_eleves'}, chargerReponsesEleves)
+   .on('postgres_changes',{event:'DELETE', schema:'public', table:'reponses_eleves'}, chargerReponsesEleves)
+   .subscribe();
+  refresh();
+}
+async function init(){
+  var sess=await client.auth.getSession(); if(!sess.data.session){ window.location.href='connexion.html'; return; }
+  var prof=await client.from('profiles').select('*').eq('id', sess.data.session.user.id).single();
+  if(prof.error||prof.data.role!=='professeur'){ await client.auth.signOut(); window.location.href='index.html'; return; }
+  await charger();
+  document.getElementById('filtre-periode').addEventListener('change', refresh);
+  document.getElementById('filtre-classe').addEventListener('change', refresh);
+  document.getElementById('filtre-matiere').addEventListener('change', refresh);
+  document.getElementById('search-seances').addEventListener('input', function(){ var d=filtrer(); renderTables(d.docs, d.seas); });
+  document.getElementById('search-docs').addEventListener('input', function(){ var d=filtrer(); renderTables(d.docs, d.seas); });
+  document.getElementById('search-eleves').addEventListener('input', renderEleves);
+  document.getElementById('export-seances').addEventListener('click', function(){ exportCSV('dashboard-seances','seances.csv'); });
+  document.getElementById('export-docs').addEventListener('click', function(){ exportCSV('dashboard-documents','documents.csv'); });
+}
+document.getElementById('deconnexion').addEventListener('click', async function(){ await client.auth.signOut(); window.location.href='connexion.html'; });
+init();
+</script>
 </body>
 </html>

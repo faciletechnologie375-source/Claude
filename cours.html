@@ -1,4 +1,4 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -6,6 +6,7 @@
     <meta name="description" content="Cours de Bureau Commercial, Technique Commerciale et Économie Générale pour les séries G.">
     <title>Cours | Réussir en Gestion</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 </head>
 <body>
     <button type="button" class="menu-toggle" aria-controls="sidebar" aria-expanded="false"><span class="menu-toggle-icon" aria-hidden="true">☰</span><span>Menu</span></button>
@@ -51,13 +52,13 @@
         function afficherDocuments() {
             const texte = recherche.value.trim().toLowerCase(), [classe,matiere] = filtres.map(filtre => filtre.value);
             const resultats = documents.filter(document => (!texte || `${document.titre} ${document.matiere} ${document.classe}`.toLowerCase().includes(texte)) && (classe === 'toutes' || document.classe === classe) && (matiere === 'toutes' || document.matiere === matiere));
-            compteur.textContent = `${resultats.length} cours`; aucunResultat.hidden = resultats.length !== 0;
-            liste.innerHTML = resultats.map(document => { const disponible = Boolean(document.fichier); return `<article class="ressource-card ${disponible ? 'disponible' : 'indisponible'}"><div class="ressource-icon" aria-hidden="true">📘</div><div class="ressource-contenu"><span class="badge">Cours</span><h3>${document.titre}</h3><p>${disponible ? 'Document disponible en PDF' : 'Document à venir'}</p></div>${disponible ? `<div class="ressource-actions"><a class="btn btn-secondaire" href="${document.fichier}" target="_blank" rel="noopener">Ouvrir</a><a class="btn" href="${document.fichier}" download>Télécharger</a></div>` : '<span class="statut-indisponible">Bientôt disponible</span>'}</article>`; }).join('');
+            compteur.textContent = `${resultats.length} cours`; aucunResultat.hidden = resultats.length!== 0;
+            liste.innerHTML = resultats.map(document => { const disponible = Boolean(document.fichier); return `<article class="ressource-card ${disponible? 'disponible' : 'indisponible'}"><div class="ressource-icon" aria-hidden="true">📘</div><div class="ressource-contenu"><span class="badge">Cours</span><h3>${document.titre}</h3><p>${disponible? 'Document disponible en PDF' : 'Document à venir'}</p></div>${disponible? `<div class="ressource-actions"><a class="btn btn-secondaire" href="${document.fichier}" target="_blank" rel="noopener">Ouvrir</a><a class="btn" href="${document.fichier}" download>Télécharger</a></div>` : '<span class="statut-indisponible">Bientôt disponible</span>'}</article>`; }).join('');
         }
         async function chargerDocuments() {
             const resultat = await client.from('documents').select('*').eq('type', 'Cours').order('created_at', { ascending: false });
             if (resultat.error) { afficherDocuments(); return; }
-            documents = [...documentsLocaux, ...(resultat.data || [])].filter(document => PROGRAMME_GESTION.estAssociationValide(document.classe, document.matiere)); afficherDocuments();
+            documents = [...documentsLocaux,...(resultat.data || [])].filter(document => PROGRAMME_GESTION.estAssociationValide(document.classe, document.matiere)); afficherDocuments();
         }
         recherche.addEventListener('input',afficherDocuments); PROGRAMME_GESTION.synchroniserFiltres(filtres[0],filtres[1],afficherDocuments); chargerDocuments();
         const menuToggle = document.querySelector('.menu-toggle'), sidebar = document.querySelector('#sidebar'), overlay = document.querySelector('.sidebar-overlay');
@@ -65,5 +66,55 @@
         menuToggle.addEventListener('click',()=>{const ouvert=!sidebar.classList.contains('ouvert');sidebar.classList.toggle('ouvert',ouvert);overlay.classList.toggle('visible',ouvert);menuToggle.setAttribute('aria-expanded',String(ouvert));overlay.setAttribute('aria-hidden',String(!ouvert));document.body.classList.toggle('menu-ouvert',ouvert);}); overlay.addEventListener('click',fermerMenu); sidebar.querySelectorAll('a').forEach(lien=>lien.addEventListener('click',fermerMenu)); document.addEventListener('keydown',event=>{if(event.key==='Escape')fermerMenu();});
     </script>
 <script src="auth.js"></script><script src="acces-site.js"></script>
+
+<script>
+// === LOGIQUE NOTIF CLASSE KKCT - NE PAS TOUCHER ===
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+OneSignalDeferred.push(async function(OneSignal) {
+  await OneSignal.init({
+    appId: "30c41a06-ddbb-4b89-9821-88b2c1d01824",
+  });
+
+  async function setClasseTag(classe){
+    if(!classe || classe === 'toutes') return;
+    await OneSignal.User.addTag("classe", classe);
+    localStorage.setItem("kkct_classe", classe);
+    console.log("Classe taggée:", classe);
+  }
+
+  async function autoTagAncienEleve(){
+    try{
+      const { data: { user } } = await client.auth.getUser();
+      if(!user) return;
+      const { data } = await client.from('profiles').select('classe').eq('id', user.id).single();
+      if(data?.classe){
+        await setClasseTag(data.classe);
+      }
+    } catch(e){}
+  }
+
+  // 1. Retaggage auto si déjà connu
+  const saved = localStorage.getItem("kkct_classe");
+  if(saved){
+    OneSignal.User.addTag("classe", saved);
+  } else {
+    // 2. Sinon on va chercher dans profiles pour les anciens
+    autoTagAncienEleve();
+  }
+
+  // 3. Quand il change le filtre classe (nouveaux élèves)
+  const filtreClasseEl = document.querySelector('#filtre-classe');
+  filtreClasseEl?.addEventListener('change', (e) => setClasseTag(e.target.value));
+
+  // 4. Quand il s'abonne aux notifs
+  OneSignal.User.PushSubscription.addEventListener("change", async (e) => {
+    if(e.current.optedIn){
+      const s = localStorage.getItem("kkct_classe");
+      if(s) OneSignal.User.addTag("classe", s);
+      else autoTagAncienEleve();
+    }
+  });
+});
+</script>
 </body>
 </html>

@@ -6,6 +6,7 @@
     <meta name="description" content="Répétitions personnalisées et supports PDF pour les élèves des séries G.">
     <title>Répétitions | Réussir en Gestion</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 </head>
 <body>
     <button type="button" class="menu-toggle" aria-controls="sidebar" aria-expanded="false"><span class="menu-toggle-icon" aria-hidden="true">☰</span><span>Menu</span></button>
@@ -81,7 +82,6 @@
         const client = supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
         const classes = PROGRAMME_GESTION.classes;
         const matieres = PROGRAMME_GESTION.matieres;
-        // Ajoutez le chemin du PDF dans « fichier » pour rendre le support accessible.
         let supports = [];
         const documents = document.querySelector('#repetition-documents'), compteur = document.querySelector('#repetition-compteur'), recherche = document.querySelector('#repetition-recherche'), filtreClasse = document.querySelector('#repetition-classe'), filtreMatiere = document.querySelector('#repetition-matiere'), classeInscription = document.querySelector('#classe'), matiereInscription = document.querySelector('#matiere');
         function actualiserMatieres(selecteurClasse, selecteurMatiere, valeurPrecedente = '') { const disponibles = selecteurClasse.value ? PROGRAMME_GESTION.matieresParClasse[selecteurClasse.value] : matieres; selecteurMatiere.innerHTML = `<option value="">Choisir une matière</option>${disponibles.map(matiere => `<option>${matiere}</option>`).join('')}`; if (disponibles.includes(valeurPrecedente)) selecteurMatiere.value = valeurPrecedente; }
@@ -98,5 +98,24 @@
         const menuToggle = document.querySelector('.menu-toggle'), sidebar = document.querySelector('#sidebar'), overlay = document.querySelector('.sidebar-overlay'); function fermerMenu(){sidebar.classList.remove('ouvert');overlay.classList.remove('visible');menuToggle.setAttribute('aria-expanded','false');overlay.setAttribute('aria-hidden','true');document.body.classList.remove('menu-ouvert');} menuToggle.addEventListener('click',()=>{const ouvert=!sidebar.classList.contains('ouvert');sidebar.classList.toggle('ouvert',ouvert);overlay.classList.toggle('visible',ouvert);menuToggle.setAttribute('aria-expanded',String(ouvert));overlay.setAttribute('aria-hidden',String(!ouvert));document.body.classList.toggle('menu-ouvert',ouvert);}); overlay.addEventListener('click',fermerMenu); sidebar.querySelectorAll('a').forEach(lien=>lien.addEventListener('click',fermerMenu)); document.addEventListener('keydown',event=>{if(event.key==='Escape')fermerMenu();});
     </script>
 <script src="auth.js"></script><script src="acces-site.js"></script>
+
+<script>
+// === LOGIQUE NOTIF CLASSE KKCT - 5 PAGES TERMINEES ===
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+OneSignalDeferred.push(async function(OneSignal) {
+  await OneSignal.init({ appId: "30c41a06-ddbb-4b89-9821-88b2c1d01824" });
+  async function setClasseTag(classe){ if(!classe || classe === 'toutes') return; await OneSignal.User.addTag("classe", classe); localStorage.setItem("kkct_classe", classe); }
+  async function autoTagAncienEleve(){ try{ const { data: { user } } = await client.auth.getUser(); if(!user) return; const { data } = await client.from('profiles').select('classe').eq('id', user.id).single(); if(data?.classe) await setClasseTag(data.classe); } catch(e){} }
+  const saved = localStorage.getItem("kkct_classe"); 
+  if(saved) OneSignal.User.addTag("classe", saved); 
+  else autoTagAncienEleve();
+  
+  // Pour cette page, 2 selects classe existent
+  document.querySelector('#repetition-classe')?.addEventListener('change', e => setClasseTag(e.target.value));
+  document.querySelector('#classe')?.addEventListener('change', e => setClasseTag(e.target.value));
+
+  OneSignal.User.PushSubscription.addEventListener("change", async e => { if(e.current.optedIn){ const s = localStorage.getItem("kkct_classe"); if(s) OneSignal.User.addTag("classe", s); else autoTagAncienEleve(); } });
+});
+</script>
 </body>
 </html>

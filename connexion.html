@@ -4,6 +4,15 @@
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Se connecter à son compte Réussir en Gestion."><title>Connexion | Réussir en Gestion</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "30c41a06-ddbb-4b89-9821-88b2c1d01824",
+        });
+      });
+    </script>
 </head>
 <body class="compte-page">
     <main class="compte-shell">
@@ -25,8 +34,21 @@
         document.querySelector('#connexion-form').addEventListener('submit', async event => {
             event.preventDefault(); const formulaire = new FormData(event.currentTarget), statut = document.querySelector('#connexion-statut');
             statut.hidden = false; statut.classList.remove('erreur'); statut.textContent = 'Connexion en cours...';
-            const { error } = await client.auth.signInWithPassword({ email: formulaire.get('email'), password: formulaire.get('mot-de-passe') });
+            const { data, error } = await client.auth.signInWithPassword({ email: formulaire.get('email'), password: formulaire.get('mot-de-passe') });
             if (error) { statut.classList.add('erreur'); statut.textContent = 'E-mail ou mot de passe incorrect.'; return; }
+            
+            // --- TAGGAGE CLASSE POUR ANCIENS ELEVES ---
+            try {
+                const classeUser = data.user?.user_metadata?.classe;
+                if(classeUser){
+                    window.OneSignalDeferred = window.OneSignalDeferred || [];
+                    OneSignalDeferred.push(async function(OneSignal) {
+                        OneSignal.User.addTag("classe", classeUser);
+                        console.log("Ancien élève retagué:", classeUser);
+                    });
+                }
+            } catch(e) { console.log("Tag error", e); }
+
             const retour = new URLSearchParams(window.location.search).get('retour');
             window.location.href = retour && /^[a-zA-Z0-9_-]+\.(html|htm)$/.test(retour) ? retour : 'index.html';
         });

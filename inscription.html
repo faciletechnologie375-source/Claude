@@ -4,6 +4,15 @@
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Créer un compte élève sur Réussir en Gestion."><title>Créer un compte | Réussir en Gestion</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "30c41a06-ddbb-4b89-9821-88b2c1d01824",
+        });
+      });
+    </script>
 </head>
 <body class="compte-page">
     <main class="compte-shell">
@@ -26,13 +35,28 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script>
     <script>
         const client = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+        
         document.querySelector('#inscription-form').addEventListener('submit', async event => {
             event.preventDefault();
             const formulaire = new FormData(event.currentTarget), statut = document.querySelector('#inscription-statut');
             if (formulaire.get('mot-de-passe') !== formulaire.get('confirmation')) { statut.hidden = false; statut.classList.add('erreur'); statut.textContent = 'Les deux mots de passe sont différents.'; return; }
             statut.hidden = false; statut.classList.remove('erreur'); statut.textContent = 'Création du compte en cours...';
-            const { data, error } = await client.auth.signUp({ email: formulaire.get('email'), password: formulaire.get('mot-de-passe'), options: { data: { nom: formulaire.get('nom'), classe: formulaire.get('classe'), telephone: formulaire.get('telephone') } } });
+            const classeChoisie = formulaire.get('classe');
+            const { data, error } = await client.auth.signUp({ email: formulaire.get('email'), password: formulaire.get('mot-de-passe'), options: { data: { nom: formulaire.get('nom'), classe: classeChoisie, telephone: formulaire.get('telephone') } } });
             if (error) { statut.classList.add('erreur'); statut.textContent = error.message; return; }
+
+            // --- TAGGAGE CLASSE POUR NOTIF FILTREE ---
+            try {
+                window.OneSignalDeferred = window.OneSignalDeferred || [];
+                OneSignalDeferred.push(async function(OneSignal) {
+                    await OneSignal.login(classeChoisie); // optionnel
+                    OneSignal.User.addTag("classe", classeChoisie);
+                    console.log("Tag classe ajouté:", classeChoisie);
+                    // Demande la permission de notif
+                    OneSignal.Slidedown.promptPush();
+                });
+            } catch(e) { console.log("OneSignal tag error", e); }
+
             if (data.session) window.location.href = 'index.html';
             else statut.textContent = 'Compte créé. Consultez votre e-mail pour confirmer votre adresse avant de vous connecter.';
         });

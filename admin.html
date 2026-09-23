@@ -5,56 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administration | Réussir en Gestion</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .admin-page{max-width:900px;margin:auto}.admin-panel{padding:32px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 7px 24px #102a430d}.admin-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.admin-form label{display:grid;gap:6px;color:var(--navy);font-weight:700}.admin-form input,.admin-form select,.admin-form textarea{min-height:43px;padding:9px 11px;border:1px solid #ccd9e3;border-radius:6px}.admin-form .full{grid-column:1/-1}.admin-form button{border:0}.admin-status{margin-top:16px;padding:12px 14px;border-left:4px solid var(--blue);background:#edf6fa;color:var(--navy)}.admin-status.erreur{border-left-color:var(--danger);background:#fff0f0;color:#8c3030}.admin-table{width:100%;margin-top:25px;border-collapse:collapse}.admin-table th,.admin-table td{padding:10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.admin-table th{color:var(--navy);font-size:.85rem}.admin-table button{padding:7px 10px;border:0;border-radius:5px;background:#f8dddd;color:#8c3030;cursor:pointer}.admin-table details{min-width:260px}.admin-table summary{cursor:pointer;color:var(--blue);font-weight:700}.participants-list{display:grid;gap:8px;margin-top:9px}.participant{display:grid;gap:2px;padding:10px;border-left:3px solid var(--gold);background:#fff9e8;color:var(--muted);font-size:.82rem;white-space:normal}.participant strong{color:var(--navy)}@media(max-width:620px){.admin-form{grid-template-columns:1fr}.admin-form .full{grid-column:auto}.admin-table{display:block;overflow:auto;white-space:nowrap}.admin-table details{white-space:normal}}
-    </style>
+    <style>.admin-page{max-width:900px;margin:auto}.admin-panel{padding:32px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 7px 24px #102a430d}.admin-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.admin-form label{display:grid;gap:6px;color:var(--navy);font-weight:700}.admin-form input,.admin-form select,.admin-form textarea{min-height:43px;padding:9px 11px;border:1px solid #ccd9e3;border-radius:6px}.admin-form.full{grid-column:1/-1}.admin-form button{border:0}.admin-status{margin-top:16px;padding:12px 14px;border-left:4px solid var(--blue);background:#edf6fa;color:var(--navy)}.admin-status.erreur{border-left-color:var(--danger);background:#fff0f0;color:#8c3030}.admin-table{width:100%;margin-top:25px;border-collapse:collapse}.admin-table th,.admin-table td{padding:10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.admin-table th{color:var(--navy);font-size:.85rem}.admin-table button{padding:7px 10px;border:0;border-radius:5px;background:#f8dddd;color:#8c3030;cursor:pointer}.admin-table details{min-width:260px}.admin-table summary{cursor:pointer;color:var(--blue);font-weight:700}.participants-list{display:grid;gap:8px;margin-top:9px}.participant{display:grid;gap:2px;padding:10px;border-left:3px solid var(--gold);background:#fff9e8;color:var(--muted);font-size:.82rem;white-space:normal}.participant strong{color:var(--navy)}@media(max-width:620px){.admin-form{grid-template-columns:1fr}.admin-table{display:block;overflow:auto;white-space:nowrap}.admin-table details{white-space:normal}}</style>
 </head>
 <body>
     <main class="admin-page">
-        <section class="page-hero">
-            <p class="sur-titre">Espace sécurisé</p>
-            <h1>Gestion des ressources</h1>
-            <p>Ajoutez les PDF qui seront visibles immédiatement sur la page des cours.</p>
-        </section>
+        <section class="page-hero"><p class="sur-titre">Espace sécurisé</p><h1>Gestion des ressources</h1><p>Ajoutez les PDF qui seront visibles immédiatement sur la page des cours.</p></section>
         <section class="admin-panel" id="seances-panel" hidden>
             <div class="section-head"><div><p class="sur-titre">Annonces</p><h2>Programmer une séance de TD</h2></div></div>
             <form id="seance-form" class="admin-form">
-                <label>Titre de la séance<input id="seance-titre" required placeholder="Ex. TD sur les réductions commerciales"></label>
-                <label>Date<input id="seance-date" type="date" required></label>
-                <label>Heure<input id="seance-heure" type="time" required></label>
-                <label>Lieu<input id="seance-lieu" required placeholder="Ex. Salle  B ou en ligne"></label>
-                <label>Classe<select id="seance-classe" required><option>2nde G1</option><option>1ère G1</option><option>Terminale G1</option><option>2nde G2</option><option>1ère G2</option><option>Terminale G2</option><option>2nde G3</option><option>1ère G3</option><option>Terminale G3</option></select></label>
-                <label>Matière<select id="seance-matiere" required></select></label>
-                <label>Nombre de places<input id="seance-places" type="number" min="1" placeholder="Facultatif"></label>
-                <label class="full">Informations complémentaires<textarea id="seance-description" rows="3" placeholder="Notions abordées, matériel à prévoir..."></textarea></label>
-                <button class="btn full" type="submit">Publier la séance</button>
-            </form>
-            <p id="seance-statut" class="admin-status" hidden aria-live="polite"></p>
-            <h2 style="margin-top:30px">Séances annoncées et inscriptions</h2>
-            <table class="admin-table"><thead><tr><th>Séance</th><th>Date</th><th>Classe</th><th>Inscrits</th><th>Participants</th><th>Action</th></tr></thead><tbody id="seances-admin"></tbody></table>
+                <label>Titre de la séance<input id="seance-titre" required></label><label>Date<input id="seance-date" type="date" required></label><label>Heure<input id="seance-heure" type="time" required></label><label>Lieu<input id="seance-lieu" required></label>
+                <label>Classe<select id="seance-classe" required><option>2nde G1</option><option>1ère G1</option><option>Terminale G1</option><option>2nde G2</option><option>1ère G2</option><option>Terminale G2</option><option>2nde G3</option><option>1ère G3</option><option>Terminale G3</option></select></label><label>Matière<select id="seance-matiere" required></select></label><label>Nombre de places<input id="seance-places" type="number" min="1"></label><label class="full">Informations<textarea id="seance-description" rows="3"></textarea></label><button class="btn full" type="submit">Publier la séance</button>
+            </form><p id="seance-statut" class="admin-status" hidden></p><h2 style="margin-top:30px">Séances annoncées et inscriptions</h2><table class="admin-table"><thead><tr><th>Séance</th><th>Date</th><th>Classe</th><th>Inscrits</th><th>Participants</th><th>Action</th></tr></thead><tbody id="seances-admin"></tbody></table>
         </section>
-        <section class="admin-panel" id="connexion-panel">
-            <h2>Connexion professeur</h2>
-            <form id="connexion-form" class="admin-form">
-                <label>Email<input id="email" type="email" required autocomplete="username"></label>
-                <label>Mot de passe<input id="mot-de-passe" type="password" required autocomplete="current-password"></label>
-                <button class="btn full" type="submit">Se connecter</button>
-            </form>
-            <p id="connexion-statut" class="admin-status" hidden aria-live="polite"></p>
-        </section>
+        <section class="admin-panel" id="connexion-panel"><h2>Connexion professeur</h2><form id="connexion-form" class="admin-form"><label>Email<input id="email" type="email" required></label><label>Mot de passe<input id="mot-de-passe" type="password" required></label><button class="btn full" type="submit">Se connecter</button></form><p id="connexion-statut" class="admin-status" hidden></p></section>
         <section class="admin-panel" id="publication-panel" hidden>
             <div class="section-head"><div><p class="sur-titre">Publication</p><h2>Ajouter un PDF</h2></div><button class="btn btn-secondaire" id="deconnexion" type="button">Se déconnecter</button></div>
-            <form id="publication-form" class="admin-form">
-                <label>Titre<input id="titre" required placeholder="Ex. Chapitre 1 : le marché"></label>
-                <label>Type<select id="type"><option>Cours</option><option>TD</option><option>Epreuve</option><option>Corrige</option><option>Repetition</option></select></label>
-                <label>Classe<select id="classe" required><option>2nde G1</option><option>1ère G1</option><option>Terminale G1</option><option>2nde G2</option><option>1ère G2</option><option>Terminale G2</option><option>2nde G3</option><option>1ère G3</option><option>Terminale G3</option></select></label>
-                <label>Matière<select id="matiere" required><option>Bureau Commercial</option><option>Technique Commerciale</option><option>Économie Générale</option></select></label>
-                <label class="full">Fichier PDF<input id="fichier" type="file" accept="application/pdf,.pdf" required></label>
-                <button class="btn full" type="submit">Publier le document</button>
-            </form>
-            <p id="statut" class="admin-status" hidden aria-live="polite"></p>
-            <h2 style="margin-top:30px">Documents publiés</h2>
-            <table class="admin-table"><thead><tr><th>Titre</th><th>Classe</th><th>Matière</th><th>Action</th></tr></thead><tbody id="documents-admin"></tbody></table>
+            <form id="publication-form" class="admin-form"><label>Titre<input id="titre" required></label><label>Type<select id="type"><option>Cours</option><option>TD</option><option>Epreuve</option><option>Corrige</option><option>Repetition</option></select></label><label>Classe<select id="classe" required><option>2nde G1</option><option>1ère G1</option><option>Terminale G1</option><option>2nde G2</option><option>1ère G2</option><option>Terminale G2</option><option>2nde G3</option><option>1ère G3</option><option>Terminale G3</option></select></label><label>Matière<select id="matiere" required></select></label><label class="full">Fichier PDF<input id="fichier" type="file" accept=".pdf" required></label><button class="btn full" type="submit">Publier le document</button></form><p id="statut" class="admin-status" hidden></p><h2 style="margin-top:30px">Documents publiés</h2><table class="admin-table"><thead><tr><th>Titre</th><th>Classe</th><th>Matière</th><th>Action</th></tr></thead><tbody id="documents-admin"></tbody></table>
         </section>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -63,64 +29,58 @@
     <script>
         const client = supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
         const connexionPanel = document.querySelector('#connexion-panel'), publicationPanel = document.querySelector('#publication-panel'), seancesPanel = document.querySelector('#seances-panel'), statut = document.querySelector('#statut'), connexionStatut = document.querySelector('#connexion-statut'), tableau = document.querySelector('#documents-admin'), tableauSeances = document.querySelector('#seances-admin'), seanceStatut = document.querySelector('#seance-statut');
-        function message(texte, erreur = false) { statut.hidden = false; statut.textContent = texte; statut.classList.toggle('erreur', erreur); }
-        function messageConnexion(texte) { connexionStatut.hidden = false; connexionStatut.textContent = texte; connexionStatut.classList.add('erreur'); }
-        function echapper(texte) { return String(texte ?? '').replace(/[&<>'"]/g, caractere => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[caractere])); }
-        async function chargerDocuments() {
-            const { data, error } = await client.from('documents').select('*').order('created_at', { ascending: false });
-            if (error) return message(error.message, true);
-            tableau.innerHTML = data.map(document => `<tr><td>${document.titre}</td><td>${document.classe}</td><td>${document.matiere}</td><td><button type="button" data-id="${document.id}" data-path="${document.storage_path}">Supprimer</button></td></tr>`).join('');
-            tableau.querySelectorAll('button').forEach(button => button.addEventListener('click', () => supprimerDocument(button.dataset.id, button.dataset.path)));
-        }
-        async function chargerSeances() {
-            const { data, error } = await client.from('td_sessions').select('*, td_inscriptions(*)').order('date_seance', { ascending: true }).order('heure', { ascending: true });
-            if (error) return afficherSeanceMessage(error.message, true);
-            tableauSeances.innerHTML = (data || []).map(seance => { const inscriptions = seance.td_inscriptions || []; const inscrits = inscriptions.length; const participants = inscriptions.length ? `<details><summary>Voir les ${inscrits} inscrit${inscrits > 1 ? 's' : ''}</summary><div class="participants-list">${inscriptions.map((inscription, index) => `<article class="participant"><strong>${index + 1}. ${echapper(inscription.nom)}</strong><span>Classe : ${echapper(inscription.classe)}</span><span>Téléphone : ${echapper(inscription.telephone)}</span>${inscription.email ? `<span>E-mail : ${echapper(inscription.email)}</span>` : ''}${inscription.message ? `<span>Message : ${echapper(inscription.message)}</span>` : ''}</article>`).join('')}</div></details>` : '<span class="statut-indisponible">Aucun inscrit</span>'; return `<tr><td>${echapper(seance.titre)}<br><small>${echapper(seance.matiere)}</small></td><td>${echapper(seance.date_seance)}<br>${echapper(seance.heure.slice(0, 5))}</td><td>${echapper(seance.classe)}</td><td>${inscrits}${seance.places ? ` / ${seance.places}` : ''}</td><td>${participants}</td><td><button type="button" data-seance-id="${seance.id}">Supprimer</button></td></tr>`; }).join('');
-            tableauSeances.querySelectorAll('[data-seance-id]').forEach(bouton => bouton.addEventListener('click', () => supprimerSeance(bouton.dataset.seanceId)));
-        }
-        function afficherSeanceMessage(texte, erreur = false) { seanceStatut.hidden = false; seanceStatut.textContent = texte; seanceStatut.classList.toggle('erreur', erreur); }
-        async function ouvrirSession(session) {
-            if (session) {
-                const profil = await client.from('profiles').select('role').eq('id', session.user.id).single();
-                if (profil.error || profil.data?.role !== 'professeur') { await client.auth.signOut(); return messageConnexion('Cet espace est réservé au professeur.'); }
+        function message(t,e=false){statut.hidden=false;statut.textContent=t;statut.classList.toggle('erreur',e);}
+        function messageConnexion(t){connexionStatut.hidden=false;connexionStatut.textContent=t;connexionStatut.classList.add('erreur');}
+        function echapper(t){return String(t??'').replace(/[&<>'"]/g,e=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[e]));}
+        async function chargerDocuments(){const{data,error}=await client.from('documents').select('*').order('created_at',{ascending:false});if(error)return message(error.message,true);tableau.innerHTML=data.map(d=>`<tr><td>${d.titre}</td><td>${d.classe}</td><td>${d.matiere}</td><td><button type="button" data-id="${d.id}" data-path="${d.storage_path}">Supprimer</button></td></tr>`).join('');tableau.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>supprimerDocument(b.dataset.id,b.dataset.path)));}
+        async function chargerSeances(){const{data,error}=await client.from('td_sessions').select('*, td_inscriptions(*)').order('date_seance',{ascending:true});if(error)return afficherSeanceMessage(error.message,true);tableauSeances.innerHTML=(data||[]).map(s=>{const ins=s.td_inscriptions||[];const p=ins.length?`<details><summary>Voir ${ins.length} inscrits</summary><div class="participants-list">${ins.map((i,idx)=>`<article class="participant"><strong>${idx+1}. ${echapper(i.nom)}</strong><span>Classe:${echapper(i.classe)}</span><span>Tel:${echapper(i.telephone)}</span></article>`).join('')}</div></details>`:'<span>Aucun inscrit</span>';return `<tr><td>${echapper(s.titre)}<br><small>${echapper(s.matiere)}</small></td><td>${echapper(s.date_seance)} ${echapper(s.heure.slice(0,5))}</td><td>${echapper(s.classe)}</td><td>${ins.length}</td><td>${p}</td><td><button data-seance-id="${s.id}">Supprimer</button></td></tr>`}).join('');tableauSeances.querySelectorAll('[data-seance-id]').forEach(b=>b.addEventListener('click',()=>supprimerSeance(b.dataset.seanceId)));}
+        function afficherSeanceMessage(t,e=false){seanceStatut.hidden=false;seanceStatut.textContent=t;seanceStatut.classList.toggle('erreur',e);}
+        async function ouvrirSession(session){if(session){const profil=await client.from('profiles').select('role').eq('id',session.user.id).single();if(profil.error||profil.data?.role!=='professeur'){await client.auth.signOut();return messageConnexion('Espace réservé au professeur.');}}connexionPanel.hidden=Boolean(session);publicationPanel.hidden=!session;seancesPanel.hidden=!session;if(session){await chargerDocuments();await chargerSeances();}}
+        const classePublication=document.querySelector('#classe'),matierePublication=document.querySelector('#matiere');function actualiserMatieres(){matierePublication.innerHTML=PROGRAMME_GESTION.matieresParClasse[classePublication.value].map(m=>`<option>${m}</option>`).join('');}actualiserMatieres();classePublication.addEventListener('change',actualiserMatieres);
+        const classeSeance=document.querySelector('#seance-classe'),matiereSeance=document.querySelector('#seance-matiere');function actualiserMatieresSeance(){matiereSeance.innerHTML=PROGRAMME_GESTION.matieresParClasse[classeSeance.value].map(m=>`<option>${m}</option>`).join('');}actualiserMatieresSeance();classeSeance.addEventListener('change',actualiserMatieresSeance);
+        document.querySelector('#connexion-form').addEventListener('submit',async e=>{e.preventDefault();const{data,error}=await client.auth.signInWithPassword({email:document.querySelector('#email').value,password:document.querySelector('#mot-de-passe').value});if(error)messageConnexion(error.message);else await ouvrirSession(data.session);});
+        document.querySelector('#deconnexion').addEventListener('click',async()=>{await client.auth.signOut();await ouvrirSession(null);});
+
+        // --- ENVOI FILTRE PAR CLASSE ---
+        async function envoyerNotification(titre, classe, matiere, type="document"){
+            try{
+                const { data, error } = await client.functions.invoke('send-notification', {
+                    body: { titre, classe, matiere, type }
+                });
+                if(error) throw error;
+                console.log("Notif envoyée pour classe:", classe, data);
+            }catch(err){
+                console.error("Erreur push filtré", err);
             }
-            connexionPanel.hidden = Boolean(session); publicationPanel.hidden = !session; seancesPanel.hidden = !session;
-            if (session) { await chargerDocuments(); await chargerSeances(); }
         }
-        const classePublication = document.querySelector('#classe'), matierePublication = document.querySelector('#matiere');
-        function actualiserMatieres() { const disponibles = PROGRAMME_GESTION.matieresParClasse[classePublication.value]; matierePublication.innerHTML = disponibles.map(matiere => `<option>${matiere}</option>`).join(''); }
-        actualiserMatieres(); classePublication.addEventListener('change', actualiserMatieres);
-        const classeSeance = document.querySelector('#seance-classe'), matiereSeance = document.querySelector('#seance-matiere');
-        function actualiserMatieresSeance() { matiereSeance.innerHTML = PROGRAMME_GESTION.matieresParClasse[classeSeance.value].map(matiere => `<option>${matiere}</option>`).join(''); }
-        actualiserMatieresSeance(); classeSeance.addEventListener('change', actualiserMatieresSeance);
-        document.querySelector('#connexion-form').addEventListener('submit', async event => { event.preventDefault(); const { data, error } = await client.auth.signInWithPassword({ email: document.querySelector('#email').value, password: document.querySelector('#mot-de-passe').value }); if (error) messageConnexion(error.message); else await ouvrirSession(data.session); });
-        document.querySelector('#deconnexion').addEventListener('click', async () => { await client.auth.signOut(); await ouvrirSession(null); });
-        document.querySelector('#seance-form').addEventListener('submit', async event => {
-            event.preventDefault(); const places = document.querySelector('#seance-places').value;
-            const seance = { titre: document.querySelector('#seance-titre').value.trim(), date_seance: document.querySelector('#seance-date').value, heure: document.querySelector('#seance-heure').value, lieu: document.querySelector('#seance-lieu').value.trim(), classe: classeSeance.value, matiere: matiereSeance.value, places: places ? Number(places) : null, description: document.querySelector('#seance-description').value.trim() || null, publie: true };
-            if (!PROGRAMME_GESTION.estAssociationValide(seance.classe, seance.matiere)) return afficherSeanceMessage('Cette matière n’est pas proposée pour cette classe.', true);
-            const resultat = await client.from('td_sessions').insert(seance);
-            if (resultat.error) return afficherSeanceMessage(resultat.error.message, true);
-            event.target.reset(); actualiserMatieresSeance(); afficherSeanceMessage('Séance publiée. Les élèves peuvent maintenant s’inscrire.'); await chargerSeances();
+
+        document.querySelector('#seance-form').addEventListener('submit',async event=>{
+            event.preventDefault();const places=document.querySelector('#seance-places').value;
+            const seance={titre:document.querySelector('#seance-titre').value.trim(),date_seance:document.querySelector('#seance-date').value,heure:document.querySelector('#seance-heure').value,lieu:document.querySelector('#seance-lieu').value.trim(),classe:classeSeance.value,matiere:matiereSeance.value,places:places?Number(places):null,description:document.querySelector('#seance-description').value.trim()||null,publie:true};
+            if(!PROGRAMME_GESTION.estAssociationValide(seance.classe,seance.matiere))return afficherSeanceMessage('Matière non proposée pour cette classe.',true);
+            const res=await client.from('td_sessions').insert(seance);if(res.error)return afficherSeanceMessage(res.error.message,true);
+            await envoyerNotification(seance.titre,seance.classe,seance.matiere,"seance");
+            event.target.reset();actualiserMatieresSeance();afficherSeanceMessage('Séance publiée + notification envoyée!');await chargerSeances();
         });
-        document.querySelector('#publication-form').addEventListener('submit', async event => {
-            event.preventDefault(); const fichier = document.querySelector('#fichier').files[0];
-            if (!fichier || (fichier.type !== 'application/pdf' && !fichier.name.toLowerCase().endsWith('.pdf'))) return message('Sélectionnez un fichier PDF valide.', true);
-            if (fichier.size > 20 * 1024 * 1024) return message('Le PDF ne doit pas dépasser 20 Mo.', true);
-            message('Envoi en cours...'); const chemin = `${crypto.randomUUID()}-${fichier.name.replace(/[^a-zA-Z0-9._-]/g, '-')}`;
-            const envoi = await client.storage.from('documents').upload(chemin, fichier, { contentType: 'application/pdf', upsert: false });
-            if (envoi.error) return message(envoi.error.message, true);
-            const fichierUrl = client.storage.from('documents').getPublicUrl(chemin).data.publicUrl;
-            const classe = classePublication.value, matiere = matierePublication.value;
-            if (!PROGRAMME_GESTION.estAssociationValide(classe, matiere)) { await client.storage.from('documents').remove([chemin]); return message('Cette matière n’est pas proposée pour cette classe.', true); }
-            const documentPublie = { type: document.querySelector('#type').value, titre: document.querySelector('#titre').value.trim(), classe, matiere, fichier: fichierUrl, storage_path: chemin };
-            const ajout = await client.from('documents').insert(documentPublie);
-            if (ajout.error) { await client.storage.from('documents').remove([chemin]); return message(ajout.error.message, true); }
-            event.target.reset(); message('Document publié avec succès.'); await chargerDocuments();
+        document.querySelector('#publication-form').addEventListener('submit',async event=>{
+            event.preventDefault();const fichier=document.querySelector('#fichier').files[0];
+            if(!fichier)return message('Sélectionnez un PDF.',true);
+            if(fichier.size>20*1024*1024)return message('PDF max 20 Mo.',true);
+            message('Envoi en cours...');const chemin=`${crypto.randomUUID()}-${fichier.name.replace(/[^a-zA-Z0-9._-]/g,'-')}`;
+            const envoi=await client.storage.from('documents').upload(chemin,fichier,{contentType:'application/pdf',upsert:false});
+            if(envoi.error)return message(envoi.error.message,true);
+            const fichierUrl=client.storage.from('documents').getPublicUrl(chemin).data.publicUrl;
+            const classe=classePublication.value,matiere=matierePublication.value;
+            if(!PROGRAMME_GESTION.estAssociationValide(classe,matiere)){await client.storage.from('documents').remove([chemin]);return message('Matière non proposée.',true);}
+            const docPublie={type:document.querySelector('#type').value,titre:document.querySelector('#titre').value.trim(),classe,matiere,fichier:fichierUrl,storage_path:chemin};
+            const ajout=await client.from('documents').insert(docPublie).select();
+            if(ajout.error){await client.storage.from('documents').remove([chemin]);return message(ajout.error.message,true);}
+            await envoyerNotification(docPublie.titre,classe,matiere,docPublie.type);
+            event.target.reset();message('Document publié + notification envoyée aux élèves de ' + classe + '!');await chargerDocuments();
         });
-        async function supprimerDocument(id, chemin) { if (!window.confirm('Supprimer ce document ?')) return; const resultat = await client.from('documents').delete().eq('id', id); if (resultat.error) return message(resultat.error.message, true); await client.storage.from('documents').remove([chemin]); message('Document supprimé.'); await chargerDocuments(); }
-        async function supprimerSeance(id) { if (!window.confirm('Supprimer cette séance et ses inscriptions ?')) return; const resultat = await client.from('td_sessions').delete().eq('id', id); if (resultat.error) return afficherSeanceMessage(resultat.error.message, true); afficherSeanceMessage('Séance supprimée.'); await chargerSeances(); }
-        client.auth.getSession().then(({ data }) => ouvrirSession(data.session));
+        async function supprimerDocument(id,chemin){if(!confirm('Supprimer?'))return;const r=await client.from('documents').delete().eq('id',id);if(r.error)return message(r.error.message,true);await client.storage.from('documents').remove([chemin]);message('Document supprimé.');await chargerDocuments();}
+        async function supprimerSeance(id){if(!confirm('Supprimer séance?'))return;const r=await client.from('td_sessions').delete().eq('id',id);if(r.error)return afficherSeanceMessage(r.error.message,true);afficherSeanceMessage('Séance supprimée.');await chargerSeances();}
+        client.auth.getSession().then(({data})=>ouvrirSession(data.session));
     </script>
 </body>
 </html>

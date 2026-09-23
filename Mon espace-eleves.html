@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon espace élève | Réussir en Gestion</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+   .eleve-header{display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:12px;}
+   .eleve-card{background:white; border-radius:14px; padding:18px; margin-bottom:16px; box-shadow:0 2px 10px rgba(0,0,0,0.05);}
+   .eleve-card h3{margin:0 0 10px; font-size:1.05rem;}
+   .btn-mini{display:inline-block; padding:8px 14px; border-radius:8px; background:#004a99; color:#fff; text-decoration:none; border:none; cursor:pointer;}
+   .btn-secondaire{padding:8px 14px; border-radius:8px; border:1px solid #ddd; background:#f3f4f6; cursor:pointer;}
+   .file-item{padding:12px; border:1px solid #e5e7eb; border-radius:10px; margin-bottom:10px; background:#f9fafb;}
+   .badge-nouveau{background:#ef4444; color:white; font-size:.7rem; padding:2px 7px; border-radius:99px; margin-left:6px;}
+    </style>
+</head>
+<body class="dashboard-page">
+<main class="dashboard-shell" style="max-width:800px; margin:0 auto; padding:20px;">
+    <div class="eleve-header">
+        <div>
+            <a class="compte-retour" href="index.html">← Retour au site</a>
+            <h1 style="margin:8px 0 4px;">Bonjour <span id="eleve-nom">...</span> 👋</h1>
+            <p style="color:#666; margin:0;">Classe: <span id="eleve-classe">-</span></p>
+        </div>
+        <div style="display:flex; gap:8px;">
+            <a href="TD.html" class="btn-mini">Aller aux TD</a>
+            <button class="btn-secondaire" id="deconnexion">Déconnexion</button>
+        </div>
+    </div>
+
+    <div id="statut" class="compte-statut" hidden></div>
+
+    <div class="eleve-card" style="border-left:4px solid #004a99;">
+        <h3>📩 Messages privés du professeur</h3>
+        <div id="liste-prives"><p>Chargement de vos messages...</p></div>
+    </div>
+
+    <div class="eleve-card" style="border-left:4px solid #16a34a;">
+        <h3>💬 Mes réponses envoyées au prof</h3>
+        <div id="liste-mes-reponses"><p style="color:#888">Chargement...</p></div>
+    </div>
+
+    <div class="eleve-card">
+        <h3>📚 Accès rapide</h3>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <a href="TD.html" class="btn-mini" style="background:#16a34a;">Voir les TD</a>
+            <a href="fiches-revision.html" class="btn-mini" style="background:#ffb400; color:#000;">Fiches de révision</a>
+            <a href="documents.html" class="btn-mini" style="background:#6b7280;">Tous les documents</a>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script>
+const client = window.supabase.createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+function echapper(v){ var s=String(v==null?'':v); return s.replace(/[&<>'"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]}); }
+
+let currentUserId = null;
+
+async function init(){
+    const { data: { session } } = await client.auth.getSession();
+    if(!session){ window.location.href='connexion.html'; return; }
+    currentUserId = session.user.id;
+
+    const { data: profil } = await client.from('profiles').select('*').eq('id', session.user.id).single();
+    if(profil){
+        document.getElementById('eleve-nom').textContent = profil.nom || profil.email || 'Élève';
+        document.getElementById('eleve-classe').textContent = profil.classe || '-';
+    }
+
+    await chargerPrives(session.user.id);
+    await chargerMesReponses(session.user.id);
+
+    localStorage.setItem('last_seen_prives_' + session.user.id, new Date().toISOString());
+
+    // === FIX VICE-VERSA INSTANTANÉ POUR DELETE ===
+    client.channel('prives-eleve-'+session.user.id)
+    .on('postgres_changes',{event:'INSERT', schema:'public', table:'fichiers_prives', filter:'eleve_id=eq.'+session.user.id}, ()=>{ chargerPrives(session.user.id); })
+    .on('postgres_changes',{event:'UPDATE', schema:'public', table:'fichiers_prives', filter:'eleve_id=eq.'+session.user.id}, ()=>{ chargerPrives(session.user.id); })
+    .on('postgres_changes',{event:'DELETE', schema:'public', table:'fichiers_prives'}, ()=>{ chargerPrives(session.user.id); })
+    .subscribe();
+
+    client.channel('reponses-eleve-'+session.user.id)
+    .on('postgres_changes',{event:'UPDATE', schema:'public', table:'reponses_eleves', filter:'eleve_id=eq.'+session.user.id}, ()=>{ chargerMesReponses(session.user.id); })
+    .on('postgres_changes',{event:'INSERT', schema:'public', table:'reponses_eleves', filter:'eleve_id=eq.'+session.user.id}, ()=>{ chargerMesReponses(session.user.id); })
+    .on('postgres_changes',{event:'DELETE', schema:'public', table:'reponses_eleves'}, ()=>{ chargerMesReponses(session.user.id); })
+    .subscribe();
+}
+
+async function chargerPrives(userId){
+    const box = document.getElementById('liste-prives');
+    const { data, error } = await client.from('fichiers_prives').select('*').eq('eleve_id', userId).order('created_at', { ascending: false });
+    if(error){ box.innerHTML = "Erreur: " + echapper(error.message); return; }
+    if(!data || data.length===0){
+        box.innerHTML = "<p style='color:#888'>Aucun message privé pour le moment.</p>";
+        return;
+    }
+    const lastSeen = localStorage.getItem('last_seen_prives_' + userId);
+    const lastDate = lastSeen? new Date(lastSeen) : new Date(0);
+    let html = "";
+    data.forEach(f => {
+        const date = new Date(f.created_at);
+        const isNew = date > lastDate;
+        const dateStr = date.toLocaleString('fr-FR');
+        html += `<div class="file-item" style="${isNew? 'border-color:#ef4444; background:#fff5f5;' : ''}">
+            <strong>${echapper(f.titre)}</strong> ${isNew? '<span class="badge-nouveau">NOUVEAU</span>' : ''} <small style="color:#666;">- ${dateStr}</small>
+            <p style="margin:8px 0;">${echapper(f.message)}</p>
+            ${f.file_url? `<a href="${echapper(f.file_url)}" target="_blank" class="btn-mini">📄 Télécharger / Voir</a>` : ''}
+            <div style="margin-top:12px; border-top:1px dashed #ddd; padding-top:10px;">
+                <textarea id="rep-${f.id}" placeholder="Écrire une réponse au prof..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc; min-height:60px;"></textarea>
+                <button class="btn-mini" style="margin-top:6px; background:#16a34a;" onclick="envoyerReponse('${f.id}')">✉️ Envoyer ma réponse</button>
+                <span id="statut-rep-${f.id}" style="font-size:.85rem; margin-left:8px;"></span>
+            </div>
+        </div>`;
+    });
+    box.innerHTML = html;
+}
+
+async function envoyerReponse(fichierId){
+    const txtEl = document.getElementById('rep-'+fichierId);
+    const statutEl = document.getElementById('statut-rep-'+fichierId);
+    const message = txtEl.value.trim();
+    if(!message){ statutEl.textContent="Écris un message"; return; }
+    statutEl.textContent="Envoi...";
+    const { error } = await client.from('reponses_eleves').insert({ eleve_id: currentUserId, fichier_prive_id: fichierId, message: message });
+    if(error){ statutEl.textContent="Erreur: "+error.message; }
+    else { statutEl.textContent="✅ Envoyé au prof!"; txtEl.value=""; chargerMesReponses(currentUserId); }
+}
+
+async function chargerMesReponses(userId){
+    const box = document.getElementById('liste-mes-reponses');
+    const { data, error } = await client.from('reponses_eleves').select('*, fichiers_prives(titre)').eq('eleve_id', userId).order('created_at',{ascending:false}).limit(20);
+    if(error){ box.innerHTML="<span style='color:#888'>Pas encore de réponses</span>"; return; }
+    if(!data || data.length==0){ box.innerHTML="<span style='color:#888'>Tu n'as pas encore répondu.</span>"; return; }
+    let html="";
+    data.forEach(r=>{
+        html+=`<div class="file-item" style="background:#f0fdf4; border-color:#bbf7d0;">
+            <small style="color:#666;">En réponse à: <b>${echapper(r.fichiers_prives?.titre||'Message')}</b> - ${new Date(r.created_at).toLocaleString('fr-FR')} ${r.lu? '<span style="color:#16a34a; font-weight:bold;">(Vu par le prof ✅)</span>' : '<span style="color:#f59e0b;">(Pas encore vu ⏳)</span>'}</small>
+            <p style="margin:6px 0;">${echapper(r.message)}</p>
+        </div>`;
+    });
+    box.innerHTML=html;
+}
+
+document.getElementById('deconnexion').addEventListener('click', async ()=>{
+    await client.auth.signOut();
+    window.location.href='connexion.html';
+});
+init();
+</script>
+</body>
+</html>
